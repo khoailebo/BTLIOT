@@ -52,9 +52,10 @@ public class MenuItem extends javax.swing.JPanel {
             lbIcon.setIcon(modelData.toImage());
         }
         else if(modelData.getType() == MenuType.MENU_GROUP){
-            lbName.setFont(new Font("Segoe UI", 1, 16));
-            lbName.setText(modelData.getMenuName());
-            lbName.setHorizontalAlignment(JLabel.CENTER);
+            lbIcon.setFont(new Font("Segoe UI", 1, 18));
+            lbIcon.setText(modelData.getMenuName());
+            lbName.setText("");
+            
         }
         else if(modelData.getType() == MenuType.MENU_SPACE){
             lbName.setText("");
@@ -93,19 +94,21 @@ public class MenuItem extends javax.swing.JPanel {
         setOpaque(false);
 
         lbName.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        lbName.setForeground(new java.awt.Color(204, 204, 204));
+        lbName.setForeground(new java.awt.Color(255, 255, 255));
         lbName.setText("MenuItem");
+
+        lbIcon.setForeground(new java.awt.Color(255, 255, 255));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(23, Short.MAX_VALUE)
+                .addGap(23, 23, 23)
                 .addComponent(lbIcon)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(lbName, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(18, 18, 18)
+                .addComponent(lbName)
+                .addContainerGap(48, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
