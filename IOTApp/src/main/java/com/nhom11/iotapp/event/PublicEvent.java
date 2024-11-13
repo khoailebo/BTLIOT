@@ -12,6 +12,15 @@ public class PublicEvent {
     public static PublicEvent instance;
     private PublicEvent(){}
     private EventMainFrame eventMainFrame;
+    private EventMenuForm eventMenuForm;
+
+    public EventMenuForm getEventMenuForm() {
+        return eventMenuForm;
+    }
+
+    public void setEventMenuForm(EventMenuForm eventMenuForm) {
+        this.eventMenuForm = eventMenuForm;
+    }
     public static PublicEvent getInstance(){
         if(instance == null)
         {

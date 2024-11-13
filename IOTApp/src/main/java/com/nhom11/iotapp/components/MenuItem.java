@@ -5,7 +5,7 @@
 package com.nhom11.iotapp.components;
 
 import com.nhom11.iotapp.model.ModelMenu;
-import com.nhom11.iotapp.model.enums.MenuType;
+import com.nhom11.iotapp.enums.MenuType;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -52,9 +52,9 @@ public class MenuItem extends javax.swing.JPanel {
             lbIcon.setIcon(modelData.toImage());
         }
         else if(modelData.getType() == MenuType.MENU_GROUP){
-            lbIcon.setFont(new Font("Segoe UI", 1, 18));
-            lbIcon.setText(modelData.getMenuName());
-            lbName.setText("");
+            lbName.setFont(new Font("Segoe UI", 1, 18));
+            lbIcon.setText(" ");
+            lbName.setText(modelData.getMenuName());
             
         }
         else if(modelData.getType() == MenuType.MENU_SPACE){
@@ -72,7 +72,7 @@ public class MenuItem extends javax.swing.JPanel {
         }
         else if(Overed)
         {
-            g2.setColor(new Color(0, 200, 255,50));
+            g2.setColor(new Color(255,255, 255,50));
             g2.fillRoundRect(10, 0, getWidth() - 20, getHeight(), 5, 5);
         }
         super.paintComponent(g);

@@ -4,7 +4,7 @@
  */
 package com.nhom11.iotapp.model;
 
-import com.nhom11.iotapp.model.enums.MenuType;
+import com.nhom11.iotapp.enums.MenuType;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 

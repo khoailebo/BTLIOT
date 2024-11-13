@@ -28,44 +28,11 @@ public class MenuForm extends javax.swing.JPanel {
 
         menuSideBar = new com.nhom11.iotapp.components.MenuSideBar();
         menuMainArea = new com.nhom11.iotapp.components.MenuMainArea();
-        formArea = new javax.swing.JPanel();
 
         setOpaque(false);
-        setPreferredSize(new java.awt.Dimension(850, 650));
+        setPreferredSize(new java.awt.Dimension(900, 600));
 
         menuSideBar.setPreferredSize(new java.awt.Dimension(190, 300));
-
-        menuMainArea.setBackground(new java.awt.Color(255, 255, 255));
-
-        formArea.setOpaque(false);
-
-        javax.swing.GroupLayout formAreaLayout = new javax.swing.GroupLayout(formArea);
-        formArea.setLayout(formAreaLayout);
-        formAreaLayout.setHorizontalGroup(
-            formAreaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 654, Short.MAX_VALUE)
-        );
-        formAreaLayout.setVerticalGroup(
-            formAreaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 638, Short.MAX_VALUE)
-        );
-
-        javax.swing.GroupLayout menuMainAreaLayout = new javax.swing.GroupLayout(menuMainArea);
-        menuMainArea.setLayout(menuMainAreaLayout);
-        menuMainAreaLayout.setHorizontalGroup(
-            menuMainAreaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(menuMainAreaLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(formArea, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        menuMainAreaLayout.setVerticalGroup(
-            menuMainAreaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(menuMainAreaLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(formArea, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -74,19 +41,18 @@ public class MenuForm extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(menuSideBar, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addComponent(menuMainArea, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(menuMainArea, javax.swing.GroupLayout.DEFAULT_SIZE, 737, Short.MAX_VALUE)
                 .addGap(0, 0, 0))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(menuMainArea, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(menuSideBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(menuMainArea, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel formArea;
     private com.nhom11.iotapp.components.MenuMainArea menuMainArea;
     private com.nhom11.iotapp.components.MenuSideBar menuSideBar;
     // End of variables declaration//GEN-END:variables

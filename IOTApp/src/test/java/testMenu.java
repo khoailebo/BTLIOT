@@ -1,12 +1,19 @@
 
+import com.nhom11.iotapp.bluetooth.BluetoothManager;
+import com.nhom11.iotapp.event.PublicEvent;
+import com.nhom11.iotapp.form.DeviceSelectionForm;
 import com.nhom11.iotapp.model.ModelMenu;
-import com.nhom11.iotapp.model.enums.MenuType;
+import com.nhom11.iotapp.enums.MenuType;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.bluetooth.BluetoothStateException;
+import javax.bluetooth.RemoteDevice;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-
 /**
  *
  * @author DELL
@@ -17,13 +24,20 @@ public class testMenu extends javax.swing.JFrame {
      * Creates new form testMenu
      */
     public testMenu() {
-        initComponents();
-        initMenu();
+        try {
+                    initComponents();
+//        initMenu();
+            List<RemoteDevice> list = BluetoothManager.getInstance().getDevicesList();
+            System.out.println(list.size());
+        } catch (BluetoothStateException ex) {
+            Logger.getLogger(testMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
-    public void initMenu(){
-        menuList1.addItem(new ModelMenu("Devices", "icon_device", MenuType.MENU_ITEM));
+    public void initMenu() {
+//        menuList1.addItem(new ModelMenu("Devices", "icon_device", MenuType.MENU_ITEM));
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -33,37 +47,68 @@ public class testMenu extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        menuList1 = new com.nhom11.iotapp.swing.MenuList<>();
+        menuMainArea1 = new com.nhom11.iotapp.components.MenuMainArea();
+        jButton1 = new javax.swing.JButton();
+        customTextField1 = new com.nhom11.iotapp.components.CustomTextField();
+        btnClickAnimate1 = new com.nhom11.iotapp.components.BtnClickAnimate();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        menuList1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
+        jButton1.setText("jButton1");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
         });
-        jScrollPane1.setViewportView(menuList1);
+
+        customTextField1.setText("customTextField1");
+
+        btnClickAnimate1.setBackground(new java.awt.Color(255, 204, 204));
+        btnClickAnimate1.setText("btnClickAnimate1");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(113, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(111, 111, 111))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(customTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(24, 24, 24)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton1)
+                            .addComponent(btnClickAnimate1, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)))
+                .addComponent(menuMainArea1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(19, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(menuMainArea1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(37, 37, 37)
+                        .addComponent(btnClickAnimate1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(39, 39, 39)
+                        .addComponent(customTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(40, 40, 40)
+                        .addComponent(jButton1)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        PublicEvent.getInstance().getEventMenuForm().changeForm(new DeviceSelectionForm());
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -101,7 +146,9 @@ public class testMenu extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JScrollPane jScrollPane1;
-    private com.nhom11.iotapp.swing.MenuList<String> menuList1;
+    private com.nhom11.iotapp.components.BtnClickAnimate btnClickAnimate1;
+    private com.nhom11.iotapp.components.CustomTextField customTextField1;
+    private javax.swing.JButton jButton1;
+    private com.nhom11.iotapp.components.MenuMainArea menuMainArea1;
     // End of variables declaration//GEN-END:variables
 }

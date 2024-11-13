@@ -77,7 +77,7 @@ public class ControlPanel extends javax.swing.JPanel {
             }
         });
 
-        moveBtn.setBackground(new java.awt.Color(51, 204, 0));
+        moveBtn.setBackground(new java.awt.Color(51, 255, 0));
         moveBtn.setPreferredSize(new java.awt.Dimension(16, 16));
         moveBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

@@ -10,6 +10,7 @@ import java.awt.Color;
 import java.awt.event.MouseEvent;
 import javax.swing.JFrame;
 
+
 /**
  *
  * @author Administrator
@@ -55,7 +56,7 @@ public class MainFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         panelBorder = new com.nhom11.iotapp.components.PanelBorder();
-        menuForm1 = new com.nhom11.iotapp.form.MenuForm();
+        menuForm = new com.nhom11.iotapp.form.MenuForm();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -64,9 +65,7 @@ public class MainFrame extends javax.swing.JFrame {
         panelBorder.setBackground(new java.awt.Color(255, 255, 255));
         panelBorder.setPreferredSize(new java.awt.Dimension(900, 600));
         panelBorder.setLayout(new java.awt.CardLayout());
-
-        menuForm1.setPreferredSize(new java.awt.Dimension(900, 600));
-        panelBorder.add(menuForm1, "card2");
+        panelBorder.add(menuForm, "card2");
 
         getContentPane().add(panelBorder, "card2");
 
@@ -110,7 +109,7 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.nhom11.iotapp.form.MenuForm menuForm1;
+    private com.nhom11.iotapp.form.MenuForm menuForm;
     private com.nhom11.iotapp.components.PanelBorder panelBorder;
     // End of variables declaration//GEN-END:variables
 }
