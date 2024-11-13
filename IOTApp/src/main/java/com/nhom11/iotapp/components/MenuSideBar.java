@@ -4,6 +4,8 @@
  */
 package com.nhom11.iotapp.components;
 
+import com.nhom11.iotapp.model.ModelMenu;
+import com.nhom11.iotapp.model.enums.MenuType;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -19,19 +21,36 @@ public class MenuSideBar extends javax.swing.JPanel {
      */
     public MenuSideBar() {
         initComponents();
+        initMenu();
+    }
+
+    public void initMenu() {
+//        menuList.removeAll();
+        menuList.addItem(new ModelMenu("Control", "", MenuType.MENU_GROUP));
+        menuList.addItem(new ModelMenu("Devices", "icon_device", MenuType.MENU_ITEM));
+        
+//        menuList.addItem(new ModelMenu("Devices","",MenuType.MENU_GROUP));
+//        menuList.addItem(new ModelMenu("Devices","",MenuType.MENU_GROUP));
+//        menuList.addItem(new ModelMenu("Devices","",MenuType.MENU_GROUP));
+//        menuList.addItem(new ModelMenu("Devices","",MenuType.MENU_GROUP));
+//        menuList.addItem(new ModelMenu("Devices","",MenuType.MENU_GROUP));
+//        menuList.addItem(new ModelMenu("Devices","",MenuType.MENU_GROUP));
+
     }
 
     @Override
     protected void paintComponent(Graphics g) {
-        Graphics2D g2 = (Graphics2D)g;
+        Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setColor(getBackground());
         g2.fillRoundRect(0, 0, getWidth(), getHeight(), 15, 15);
         g2.fillRect(getWidth() - 20, 0, 20, getHeight());
         super.paintComponent(g); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
     }
+
     
     
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -41,66 +60,79 @@ public class MenuSideBar extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        controlPanel1 = new com.nhom11.iotapp.components.ControlPanel();
-        imagePanel1 = new com.nhom11.iotapp.components.ImagePanel();
-        jLabel1 = new javax.swing.JLabel();
+        controlPanel = new com.nhom11.iotapp.components.ControlPanel();
+        imagePanel = new com.nhom11.iotapp.components.ImagePanel();
+        lbName = new javax.swing.JLabel();
+        menuList = new com.nhom11.iotapp.swing.MenuList<>();
 
         setBackground(new java.awt.Color(51, 182, 252));
         setOpaque(false);
 
-        imagePanel1.setImage(new javax.swing.ImageIcon(getClass().getResource("/icon/Vietnamese_Traffic_Police_Icon-removebg-preview.png"))); // NOI18N
-        imagePanel1.setPreferredSize(new java.awt.Dimension(60, 60));
+        imagePanel.setImage(new javax.swing.ImageIcon(getClass().getResource("/icon/Vietnamese_Traffic_Police_Icon-removebg-preview.png"))); // NOI18N
+        imagePanel.setPreferredSize(new java.awt.Dimension(60, 60));
 
-        javax.swing.GroupLayout imagePanel1Layout = new javax.swing.GroupLayout(imagePanel1);
-        imagePanel1.setLayout(imagePanel1Layout);
-        imagePanel1Layout.setHorizontalGroup(
-            imagePanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout imagePanelLayout = new javax.swing.GroupLayout(imagePanel);
+        imagePanel.setLayout(imagePanelLayout);
+        imagePanelLayout.setHorizontalGroup(
+            imagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 60, Short.MAX_VALUE)
         );
-        imagePanel1Layout.setVerticalGroup(
-            imagePanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        imagePanelLayout.setVerticalGroup(
+            imagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        jLabel1.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("CSGT");
+        lbName.setBackground(new java.awt.Color(255, 255, 255));
+        lbName.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        lbName.setForeground(new java.awt.Color(255, 255, 255));
+        lbName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbName.setText("CSGT");
+
+        menuList.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 1, 1, 1));
+        menuList.setForeground(new java.awt.Color(0, 0, 0));
+        menuList.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        menuList.setOpaque(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(9, Short.MAX_VALUE)
-                        .addComponent(imagePanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(14, 14, 14)
-                        .addComponent(controlPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(39, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(imagePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lbName)
+                .addGap(26, 26, 26))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addComponent(controlPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(menuList, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(controlPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(12, 12, 12)
+                .addComponent(controlPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(imagePanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE))
-                .addContainerGap(400, Short.MAX_VALUE))
+                    .addComponent(imagePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lbName, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(menuList, javax.swing.GroupLayout.DEFAULT_SIZE, 351, Short.MAX_VALUE)
+                .addGap(19, 19, 19))
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.nhom11.iotapp.components.ControlPanel controlPanel1;
-    private com.nhom11.iotapp.components.ImagePanel imagePanel1;
-    private javax.swing.JLabel jLabel1;
+    private com.nhom11.iotapp.components.ControlPanel controlPanel;
+    private com.nhom11.iotapp.components.ImagePanel imagePanel;
+    private javax.swing.JLabel lbName;
+    private com.nhom11.iotapp.swing.MenuList<String> menuList;
     // End of variables declaration//GEN-END:variables
 }

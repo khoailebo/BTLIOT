@@ -33,7 +33,6 @@ public class MenuForm extends javax.swing.JPanel {
         setOpaque(false);
         setPreferredSize(new java.awt.Dimension(850, 650));
 
-        menuSideBar.setBackground(new java.awt.Color(51, 182, 252));
         menuSideBar.setPreferredSize(new java.awt.Dimension(190, 300));
 
         menuMainArea.setBackground(new java.awt.Color(255, 255, 255));

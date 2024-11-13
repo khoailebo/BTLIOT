@@ -40,9 +40,6 @@
   <SubComponents>
     <Component class="com.nhom11.iotapp.components.MenuSideBar" name="menuSideBar">
       <Properties>
-        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="fc" green="b6" red="33" type="rgb"/>
-        </Property>
         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
           <Dimension value="[190, 300]"/>
         </Property>
