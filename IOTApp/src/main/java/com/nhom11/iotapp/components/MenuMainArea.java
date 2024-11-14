@@ -71,7 +71,7 @@ public class MenuMainArea extends javax.swing.JPanel {
         setOpaque(false);
         setPreferredSize(new java.awt.Dimension(710, 500));
 
-        formArea.setBackground(new java.awt.Color(204, 255, 102));
+        formArea.setBackground(new java.awt.Color(255, 255, 255));
         formArea.setOpaque(false);
         formArea.setLayout(new java.awt.CardLayout());
 

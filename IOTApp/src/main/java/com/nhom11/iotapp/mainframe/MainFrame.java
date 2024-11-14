@@ -6,6 +6,9 @@ package com.nhom11.iotapp.mainframe;
 
 import com.nhom11.iotapp.event.EventMainFrame;
 import com.nhom11.iotapp.event.PublicEvent;
+
+import net.miginfocom.swing.MigLayout;
+
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import javax.swing.JFrame;

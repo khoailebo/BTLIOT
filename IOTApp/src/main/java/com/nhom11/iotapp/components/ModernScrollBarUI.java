@@ -8,6 +8,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JScrollBar;
@@ -61,7 +62,8 @@ public class ModernScrollBarUI extends BasicScrollBarUI {
         height = Math.max(height, THUMB_SIZE);
         Graphics2D g2 = (Graphics2D) g.create();
         g2.setColor(new Color(THUMB_COLOR.getRed(), THUMB_COLOR.getGreen(), THUMB_COLOR.getBlue(), alpha));
-        g2.fillRoundRect(x, y, width, height, THUMB_SIZE, THUMB_SIZE);
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2.fillRoundRect(x + 2, y, width - 4, height, 4, 4);
         g2.dispose();
     }
 

@@ -4,6 +4,7 @@
  */
 package com.nhom11.iotapp.swing;
 
+import com.nhom11.iotapp.bluetooth.BluetoothManager;
 import com.nhom11.iotapp.components.MenuItem;
 import com.nhom11.iotapp.event.PublicEvent;
 import com.nhom11.iotapp.form.DeviceDetailForm;
@@ -32,18 +33,18 @@ public class MenuList<E extends Object> extends JList<E> {
     private int selectedIndex = -1;
     private int overedIndex = -1;
 
-    
-    private Component getForm(ModelMenu data){
+    private Component getForm(ModelMenu data) {
         Component comp;
         switch (data.getMenuName()) {
             case "Devices":
-                comp = new DeviceSelectionForm();
+                comp = BluetoothManager.getInstance().isConnected() ? new DeviceDetailForm() : new DeviceSelectionForm();
                 break;
             default:
                 comp = null;
         }
         return comp;
     }
+
     public MenuList() {
         model = new DefaultListModel();
         setModel(model);
@@ -54,11 +55,13 @@ public class MenuList<E extends Object> extends JList<E> {
                     int index = locationToIndex(e.getPoint());
                     ModelMenu data = (ModelMenu) model.getElementAt(index);
                     if (data.getType() == MenuType.MENU_ITEM) {
-                        selectedIndex = index;
-                        PublicEvent.getInstance().getEventMenuForm().changeForm(getForm(data));
-                        repaint();
+                        if (selectedIndex != index) {
+                            selectedIndex = index;
+                            PublicEvent.getInstance().getEventMenuForm().changeForm(getForm(data));
+                            repaint();
+                        }
                     }
-                    
+
                 }
             }
 

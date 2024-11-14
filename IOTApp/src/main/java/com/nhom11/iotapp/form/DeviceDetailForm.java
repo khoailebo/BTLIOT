@@ -4,7 +4,14 @@
  */
 package com.nhom11.iotapp.form;
 
+import com.nhom11.iotapp.bluetooth.BluetoothManager;
+import com.nhom11.iotapp.bluetooth.VirtualDevice;
+import com.nhom11.iotapp.components.LoadingPanel;
+import com.nhom11.iotapp.event.PublicEvent;
 import java.awt.Color;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -19,8 +26,17 @@ public class DeviceDetailForm extends javax.swing.JPanel {
         initComponents();
         disconBtn.setBackground(Color.white);
 
+        initData();
     }
 
+    public void initData(){
+        VirtualDevice device = BluetoothManager.getInstance().getVirtualDevice();
+        if(device != null){
+            tfId.setText(device.getId());
+            tfName.setText(device.getName());
+            tfMode.setText("Bluetooth");
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -41,17 +57,17 @@ public class DeviceDetailForm extends javax.swing.JPanel {
         disconBtn = new com.nhom11.iotapp.components.MyButton();
         updateBtn = new com.nhom11.iotapp.components.MyButton();
         jLabel3 = new javax.swing.JLabel();
-        btnClickAnimate1 = new com.nhom11.iotapp.components.BtnClickAnimate();
+        mesureBtn = new com.nhom11.iotapp.components.BtnClickAnimate();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
-        panelBorder1.setBackground(new java.awt.Color(255, 204, 204));
+        panelBorder1.setBackground(new java.awt.Color(51, 182, 252));
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Device Id:");
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Device Name:");
 
@@ -62,20 +78,20 @@ public class DeviceDetailForm extends javax.swing.JPanel {
         imagePanel1.setLayout(imagePanel1Layout);
         imagePanel1Layout.setHorizontalGroup(
             imagePanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 148, Short.MAX_VALUE)
+            .addGap(0, 182, Short.MAX_VALUE)
         );
         imagePanel1Layout.setVerticalGroup(
             imagePanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Connection Mode: ");
 
         tfId.setEditable(false);
-        tfId.setBackground(new java.awt.Color(255, 204, 204));
-        tfId.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        tfId.setBackground(new java.awt.Color(51, 182, 252));
+        tfId.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         tfId.setForeground(new java.awt.Color(255, 255, 255));
         tfId.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
         tfId.setText("laksdjflkasjdlfjals");
@@ -89,8 +105,8 @@ public class DeviceDetailForm extends javax.swing.JPanel {
         });
 
         tfName.setEditable(false);
-        tfName.setBackground(new java.awt.Color(255, 204, 204));
-        tfName.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        tfName.setBackground(new java.awt.Color(51, 182, 252));
+        tfName.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         tfName.setForeground(new java.awt.Color(255, 255, 255));
         tfName.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
         tfName.setText("laksdjflkasjdlfjals");
@@ -103,8 +119,8 @@ public class DeviceDetailForm extends javax.swing.JPanel {
         });
 
         tfMode.setEditable(false);
-        tfMode.setBackground(new java.awt.Color(255, 204, 204));
-        tfMode.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        tfMode.setBackground(new java.awt.Color(51, 182, 252));
+        tfMode.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         tfMode.setForeground(new java.awt.Color(255, 255, 255));
         tfMode.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
         tfMode.setText("laksdjflkasjdlfjals");
@@ -118,8 +134,13 @@ public class DeviceDetailForm extends javax.swing.JPanel {
 
         disconBtn.setText("Disconnect");
         disconBtn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        disconBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                disconBtnActionPerformed(evt);
+            }
+        });
 
-        updateBtn.setBackground(new java.awt.Color(255, 102, 102));
+        updateBtn.setBackground(new java.awt.Color(0, 71, 121));
         updateBtn.setForeground(new java.awt.Color(255, 255, 255));
         updateBtn.setText("Update Info");
         updateBtn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -129,10 +150,10 @@ public class DeviceDetailForm extends javax.swing.JPanel {
         panelBorder1Layout.setHorizontalGroup(
             panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelBorder1Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(26, 26, 26)
                 .addComponent(imagePanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGap(79, 79, 79)
+                .addGroup(panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(panelBorder1Layout.createSequentialGroup()
                         .addGroup(panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
@@ -143,11 +164,11 @@ public class DeviceDetailForm extends javax.swing.JPanel {
                             .addComponent(tfId, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(tfName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(tfMode, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(panelBorder1Layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBorder1Layout.createSequentialGroup()
                         .addComponent(disconBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(18, 18, 18)
                         .addComponent(updateBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                .addGap(61, 61, 61))
         );
         panelBorder1Layout.setVerticalGroup(
             panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -157,7 +178,7 @@ public class DeviceDetailForm extends javax.swing.JPanel {
                         .addContainerGap()
                         .addComponent(imagePanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(panelBorder1Layout.createSequentialGroup()
-                        .addGap(36, 36, 36)
+                        .addContainerGap(37, Short.MAX_VALUE)
                         .addGroup(panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
                             .addComponent(tfId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -169,7 +190,7 @@ public class DeviceDetailForm extends javax.swing.JPanel {
                         .addGroup(panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(tfMode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel4))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                        .addGap(31, 31, 31)
                         .addGroup(panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(updateBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(disconBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -181,28 +202,32 @@ public class DeviceDetailForm extends javax.swing.JPanel {
         jLabel3.setForeground(new java.awt.Color(153, 153, 153));
         jLabel3.setText("Devices Detail");
 
-        btnClickAnimate1.setBackground(new java.awt.Color(255, 102, 102));
-        btnClickAnimate1.setForeground(new java.awt.Color(255, 255, 255));
-        btnClickAnimate1.setText("Mesure");
-        btnClickAnimate1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        mesureBtn.setBackground(new java.awt.Color(51, 182, 252));
+        mesureBtn.setForeground(new java.awt.Color(255, 255, 255));
+        mesureBtn.setText("Mesure");
+        mesureBtn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        mesureBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mesureBtnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(56, 56, 56)
-                        .addComponent(jLabel3))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(28, 28, 28)
-                        .addComponent(panelBorder1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(253, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(btnClickAnimate1, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(mesureBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(32, 32, 32))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(28, 28, 28)
+                .addComponent(panelBorder1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(28, 28, 28))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(45, 45, 45)
+                .addComponent(jLabel3)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -212,7 +237,7 @@ public class DeviceDetailForm extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addComponent(panelBorder1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 156, Short.MAX_VALUE)
-                .addComponent(btnClickAnimate1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(mesureBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(26, 26, 26))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -229,15 +254,43 @@ public class DeviceDetailForm extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_tfModeActionPerformed
 
+    private void disconBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_disconBtnActionPerformed
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    // TODO add your handling code here:
+                    PublicEvent.getInstance().getEventMenuForm().changeForm(new LoadingPanel());
+                    BluetoothManager.getInstance().getVirtualDevice().disconnect();
+                    PublicEvent.getInstance().getEventMenuForm().changeForm(new DeviceSelectionForm());
+                } catch (IOException ex) {
+                    Logger.getLogger(DeviceDetailForm.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (Exception ex) {
+                    ex.printStackTrace();  } 
+            }
+        }, "Disconnect Thread").start();
+    }//GEN-LAST:event_disconBtnActionPerformed
+
+    private void mesureBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mesureBtnActionPerformed
+        // TODO add your handling code here:
+        new Thread(() -> {
+            try {
+                BluetoothManager.getInstance().getVirtualDevice().mesure();
+            } catch (IOException ex) {
+                Logger.getLogger(DeviceDetailForm.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        },"Mesure Thread").start();
+    }//GEN-LAST:event_mesureBtnActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.nhom11.iotapp.components.BtnClickAnimate btnClickAnimate1;
     private com.nhom11.iotapp.components.MyButton disconBtn;
     private com.nhom11.iotapp.components.ImagePanel imagePanel1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private com.nhom11.iotapp.components.BtnClickAnimate mesureBtn;
     private com.nhom11.iotapp.components.PanelBorder panelBorder1;
     private javax.swing.JTextField tfId;
     private javax.swing.JTextField tfMode;

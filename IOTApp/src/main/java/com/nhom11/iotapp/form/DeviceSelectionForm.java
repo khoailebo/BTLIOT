@@ -5,6 +5,8 @@
 package com.nhom11.iotapp.form;
 
 import com.nhom11.iotapp.bluetooth.BluetoothManager;
+import com.nhom11.iotapp.callback.Invokelater;
+import com.nhom11.iotapp.components.LoadingPanel;
 import com.nhom11.iotapp.components.ScrollBar;
 import com.nhom11.iotapp.event.PublicEvent;
 import com.nhom11.iotapp.event.TableSelectedEvent;
@@ -47,8 +49,26 @@ public class DeviceSelectionForm extends javax.swing.JPanel {
                 new TableSelectedEvent() {
             @Override
             public void onClick(int row) {
-                System.out.println("Row clicked: " + row);
-                PublicEvent.getInstance().getEventMenuForm().changeForm(new DeviceDetailForm());
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        System.out.println("Row clicked: " + row);
+                        PublicEvent.getInstance().getEventMenuForm().changeForm(new LoadingPanel());
+                        BluetoothManager.getInstance().connectToDevice(row, new Invokelater() {
+                            @Override
+                            public void call(Object... obj) {
+                                boolean connected = (boolean) obj[0];
+                                if (connected) {
+                                    PublicEvent.getInstance().getEventMenuForm().changeForm(new DeviceDetailForm());
+                                } else {
+                                    PublicEvent.getInstance().getEventMenuForm().changeForm(new DeviceSelectionForm());
+                                }
+                            }
+
+                        });
+                    }
+
+                }, "Connect Thread").start();
             }
         }
         ));
@@ -70,6 +90,11 @@ public class DeviceSelectionForm extends javax.swing.JPanel {
 
     }
 
+    public void showLoading(boolean show) {
+        loadingPanel.setVisible(show);
+        jScrollPane.setVisible(!show);
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -83,6 +108,7 @@ public class DeviceSelectionForm extends javax.swing.JPanel {
         panelBox = new javax.swing.JPanel();
         jScrollPane = new javax.swing.JScrollPane();
         devicesTable = new com.nhom11.iotapp.components.Table();
+        loadingPanel = new com.nhom11.iotapp.components.LoadingPanel();
         jLabel1 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 153, 204));
@@ -136,9 +162,10 @@ public class DeviceSelectionForm extends javax.swing.JPanel {
         }
 
         panelBox.add(jScrollPane, "card2");
+        panelBox.add(loadingPanel, "card3");
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(153, 153, 153));
+        jLabel1.setForeground(new java.awt.Color(102, 102, 102));
         jLabel1.setText("Devices List");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -173,25 +200,31 @@ public class DeviceSelectionForm extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void searchBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBtnActionPerformed
-        try {
-            new Thread(
-                    new Runnable() {
-                @Override
-                public void run() {
+        if (!BluetoothManager.getInstance().isConnecting()) {
+            try {
+                new Thread(
+                        new Runnable() {
+                    @Override
+                    public void run() {
 //                    throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-                    List<RemoteDevice> devicesList;
-                    try {
-                        devicesList = BluetoothManager.getInstance().getDevicesList();
-                        setTableData(devicesList);
-                    } catch (BluetoothStateException ex) {
-                        Logger.getLogger(DeviceSelectionForm.class.getName()).log(Level.SEVERE, null, ex);
+                        List<RemoteDevice> devicesList;
+                        try {
+//                        loadingPanel.setVisible(true);
+                            showLoading(true);
+                            devicesList = BluetoothManager.getInstance().getDevicesList();
+                            setTableData(devicesList);
+                        } catch (BluetoothStateException ex) {
+                            Logger.getLogger(DeviceSelectionForm.class.getName()).log(Level.SEVERE, null, ex);
+                        } finally {
+                            showLoading(false);
+                        }
                     }
                 }
+                ).start();
+
+            } catch (Exception ex) {
+                Logger.getLogger(DeviceSelectionForm.class.getName()).log(Level.SEVERE, null, ex);
             }
-            ).start();
-            
-        } catch (Exception ex) {
-            Logger.getLogger(DeviceSelectionForm.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_searchBtnActionPerformed
 
@@ -200,6 +233,7 @@ public class DeviceSelectionForm extends javax.swing.JPanel {
     private com.nhom11.iotapp.components.Table devicesTable;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane;
+    private com.nhom11.iotapp.components.LoadingPanel loadingPanel;
     private javax.swing.JPanel panelBox;
     private com.nhom11.iotapp.components.MyButton searchBtn;
     // End of variables declaration//GEN-END:variables

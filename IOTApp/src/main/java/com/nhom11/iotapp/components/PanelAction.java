@@ -52,7 +52,7 @@ public class PanelAction extends javax.swing.JPanel {
 
         setOpaque(false);
 
-        conBtn.setBackground(new java.awt.Color(51, 255, 51));
+        conBtn.setBackground(new java.awt.Color(51, 182, 252));
         conBtn.setForeground(new java.awt.Color(255, 255, 255));
         conBtn.setText("Connect");
         conBtn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N

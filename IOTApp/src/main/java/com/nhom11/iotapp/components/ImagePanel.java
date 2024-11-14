@@ -16,7 +16,7 @@ import javax.swing.ImageIcon;
  *
  * @author DELL
  */
-public class ImagePanel extends javax.swing.JPanel {
+public class ImagePanel extends javax.swing.JLayeredPane {
 
     /**
      * Creates new form ImagePanel

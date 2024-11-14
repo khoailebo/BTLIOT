@@ -42,12 +42,30 @@ void connectionTask(void *pvParameters) {
       String request = ESP_BT.readString();  // Đọc dữ liệu từ client
       Serial.print("Received request: ");
       Serial.println(request);  // In ra dữ liệu nhận được để kiểm tra
-      if (request == "TestMessage") {
-        ESP_BT.println("Message received");
-      } else if (request == "GetAlcohol") {
-        detectAlcohol();
-        ESP_BT.println(MaxAlcohol);
+
+      int seperatorIndex = request.indexOf('|');
+
+      if (seperatorIndex != -1) {
+        String eventName = request.substring(0, seperatorIndex);
+        String data = request.substring(seperatorIndex + 1);
+        Serial.print("Event: ");
+        Serial.println(eventName);
+        Serial.print("Data: ");
+        Serial.println(data);
+        if (eventName == "TestMessage") {
+          ESP_BT.println("Message received");
+        } else if (eventName == "GetAlcohol") {
+          detectAlcohol();
+          ESP_BT.println(MaxAlcohol);
+        }
+        else if(eventName == "Disconnect"){
+          ESP_BT.println("Disconnect");
+          disconnect();
+          break;
+        }
       }
+
+
       // Xử lý request tùy ý (bạn có thể thêm xử lý riêng cho request ở đây)
 
       // Ví dụ: Phản hồi lại client
@@ -60,7 +78,11 @@ void connectionTask(void *pvParameters) {
     connectionTaskHandle = NULL;
   }
 }
-
+void disconnect(){
+  ESP_BT.disconnect();
+  ESP_BT.end();
+  Serial.println("End Connection!");
+}
 void BTAdvertisingTask(void *pvParameters) {
   if (!ESP_BT.begin("ESP32_Bluetooth_Server")) {  // Initialize Bluetooth with device name
     Serial.println("Bluetooth initialization failed.");
@@ -94,7 +116,7 @@ void BTAdvertisingTask(void *pvParameters) {
     vTaskDelay(100 / portTICK_PERIOD_MS);  // Check every 100 ms
   }
   if (isConnected) {
-    xTaskCreate(connectionTask, "connectionTask", 4096, NULL, 5, &connectionTaskHandle);
+    xTaskCreate(connectionTask, "connectionTask", 4096, NULL, 200, &connectionTaskHandle);
   }
   // If no connection was established, end Bluetooth
   if (!isConnected) {
@@ -196,11 +218,17 @@ void resetLCD() {
   lcd.print("Press button...");
 }
 void detectAlcohol() {
+  if(ESP_BT.hasClient()){
+    ESP_BT.println("StartMesuring");
+  }
   MaxAlcohol = 0;
   postDelay(5000, 1000, showAlcoholDetail);
   digitalWrite(LED_BLUE, LOW);
   digitalWrite(LED_RED, LOW);
   resetLCD();
+  if(ESP_BT.hasClient()){
+    ESP_BT.println("GetAlcohol|"+String(MaxAlcohol,2));
+  }
 }
 void postDelay(int time, int delayTime, void (*func)()) {
   unsigned long lastTime = millis();
