@@ -19,6 +19,7 @@ float MaxAlcohol = 0;
 bool playingBluetooth = false;
 unsigned long buttonPressTime = 0;  // Variable to store button press duration
 bool isButtonPressed = false;       // Flag to track button press status
+bool mesuring = false;
 
 void BTLEDMode(void *pvParameters) {
   while (playingBluetooth) {
@@ -57,8 +58,7 @@ void connectionTask(void *pvParameters) {
         } else if (eventName == "GetAlcohol") {
           detectAlcohol();
           ESP_BT.println(MaxAlcohol);
-        }
-        else if(eventName == "Disconnect"){
+        } else if (eventName == "Disconnect") {
           ESP_BT.println("Disconnect");
           disconnect();
           break;
@@ -78,7 +78,7 @@ void connectionTask(void *pvParameters) {
     connectionTaskHandle = NULL;
   }
 }
-void disconnect(){
+void disconnect() {
   ESP_BT.disconnect();
   ESP_BT.end();
   Serial.println("End Connection!");
@@ -102,6 +102,7 @@ void BTAdvertisingTask(void *pvParameters) {
 
   unsigned long startTime = millis();
   bool isConnected = false;
+  
 
   // Wait for up to 10 seconds for a connection
   while (millis() - startTime < 30000) {  // 20 seconds
@@ -218,16 +219,20 @@ void resetLCD() {
   lcd.print("Press button...");
 }
 void detectAlcohol() {
-  if(ESP_BT.hasClient()){
-    ESP_BT.println("StartMesuring");
-  }
-  MaxAlcohol = 0;
-  postDelay(5000, 1000, showAlcoholDetail);
-  digitalWrite(LED_BLUE, LOW);
-  digitalWrite(LED_RED, LOW);
-  resetLCD();
-  if(ESP_BT.hasClient()){
-    ESP_BT.println("GetAlcohol|"+String(MaxAlcohol,2));
+  if (!mesuring) {
+    mesuring = true;
+    if (ESP_BT.hasClient()) {
+      ESP_BT.println("StartMesuring");
+    }
+    MaxAlcohol = 0;
+    postDelay(5000, 1000, showAlcoholDetail);
+    digitalWrite(LED_BLUE, LOW);
+    digitalWrite(LED_RED, LOW);
+    resetLCD();
+    if (ESP_BT.hasClient()) {
+      ESP_BT.println("GetAlcohol|" + String(MaxAlcohol, 2));
+    }
+    mesuring = false;
   }
 }
 void postDelay(int time, int delayTime, void (*func)()) {
