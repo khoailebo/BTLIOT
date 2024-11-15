@@ -72,7 +72,7 @@ public class DeviceDetailForm extends javax.swing.JPanel {
         jLabel2.setText("Device Name:");
 
         imagePanel1.setFit(true);
-        imagePanel1.setImage(new javax.swing.ImageIcon(getClass().getResource("/icon/esp32.png"))); // NOI18N
+        imagePanel1.setImage(new javax.swing.ImageIcon(getClass().getResource("/com/nhom11/iotapp/resources/icon/esp32.png"))); // NOI18N
 
         javax.swing.GroupLayout imagePanel1Layout = new javax.swing.GroupLayout(imagePanel1);
         imagePanel1.setLayout(imagePanel1Layout);

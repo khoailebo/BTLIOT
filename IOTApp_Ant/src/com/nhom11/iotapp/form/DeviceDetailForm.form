@@ -155,7 +155,7 @@
           <Properties>
             <Property name="fit" type="boolean" value="true"/>
             <Property name="image" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/icon/esp32.png"/>
+              <Image iconType="3" name="/com/nhom11/iotapp/resources/icon/esp32.png"/>
             </Property>
           </Properties>
 
