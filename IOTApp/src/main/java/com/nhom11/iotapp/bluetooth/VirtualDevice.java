@@ -6,12 +6,14 @@ package com.nhom11.iotapp.bluetooth;
 
 import com.nhom11.iotapp.callback.Invokelater;
 import com.nhom11.iotapp.event.PublicEvent;
+import com.nhom11.iotapp.form.DeviceSelectionForm;
 import com.nhom11.iotapp.form.MesuringForm;
 import com.nhom11.iotapp.form.ResultForm;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,6 +32,7 @@ public class VirtualDevice implements Runnable {
     String Id;
     BufferedReader reader;
     BufferedWriter writer;
+    OutputStream output;
 
     public String getName() {
         return Name;
@@ -48,12 +51,13 @@ public class VirtualDevice implements Runnable {
     }
     StreamConnection connection;
     Thread RecievedThread;
+    Thread CheckConnectionThread;
     HashMap<String, ArrayList<Invokelater>> callBackList;
-    static HashMap<String,Invokelater> eventListenerHashMap;
+    static HashMap<String, Invokelater> eventListenerHashMap;
     boolean Disconnect;
 
-    public static void initEvent(){
-        if(eventListenerHashMap == null){
+    public static void initEvent() {
+        if (eventListenerHashMap == null) {
             eventListenerHashMap = new HashMap<>();
             eventListenerHashMap.put("StartMesuring", new Invokelater() {
                 @Override
@@ -64,24 +68,27 @@ public class VirtualDevice implements Runnable {
             eventListenerHashMap.put("GetAlcohol", new Invokelater() {
                 @Override
                 public void call(Object... obj) {
-                    AlcoholValue = Float.parseFloat((String)obj[0]);
+                    AlcoholValue = Float.parseFloat((String) obj[0]);
                     System.out.println(AlcoholValue);
                     PublicEvent.getInstance().getEventMenuForm().changeForm(new ResultForm());
                 }
             });
         }
     }
+
     public VirtualDevice(String id, String name, StreamConnection streamConnection) {
         this.Name = name;
         callBackList = new HashMap<>();
-        
+
         this.Id = id;
         this.connection = streamConnection;
         try {
 
+            output = streamConnection.openOutputStream();
             reader = new BufferedReader(new InputStreamReader(streamConnection.openInputStream()));
-            writer = new BufferedWriter(new OutputStreamWriter(streamConnection.openOutputStream()));
+            writer = new BufferedWriter(new OutputStreamWriter(output));
             RecievedThread = new Thread(this, "Recieved Thread");
+            CheckConnectionThread = new Thread(new CheckConnectionRunable(), "Check Connection Thread");
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -90,6 +97,7 @@ public class VirtualDevice implements Runnable {
 
     public void startCommunicate() {
         RecievedThread.start();
+        CheckConnectionThread.start();
     }
 
     static float AlcoholValue = -1;
@@ -104,7 +112,7 @@ public class VirtualDevice implements Runnable {
 
     public void mesure() throws IOException {
         AlcoholValue = -1;
-        sendEvent("GetAlcohol", null,null);
+        sendEvent("GetAlcohol", null, null);
 //        return value;
     }
 
@@ -126,8 +134,10 @@ public class VirtualDevice implements Runnable {
     }
 
     public void sendMsg(String msg) throws IOException {
-        writer.write(msg);
-        writer.flush();
+//        writer.write(msg);
+//        writer.flush();
+        output.write(msg.getBytes());
+        output.flush();
     }
 
     public void performCallBack(String msg) {
@@ -143,7 +153,7 @@ public class VirtualDevice implements Runnable {
             }
         }
     }
-    
+
     public void performEventListener(String msg) {
         String buffers[] = msg.split("\\|");
         String eventName = buffers[0];
@@ -170,31 +180,75 @@ public class VirtualDevice implements Runnable {
         }
     }
 
+    public void disconnectProtocol() {
+        new Thread(() -> {
+            try {
+                writer.close();
+                reader.close();
+                connection.close();
+                BluetoothManager.getInstance().setVirtualDevice(null);
+                BluetoothManager.getInstance().setConnected(false);
+                Disconnect = true;
+                PublicEvent.getInstance().getEventMenuForm().changeForm(new DeviceSelectionForm());
+                System.out.println("dis");
+            } catch (IOException ex) {
+                Logger.getLogger(VirtualDevice.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }, "Disconnect Thread").start();
+    }
+
     public void disconnect() throws IOException {
         sendEvent("Disconnect", null, new Invokelater() {
             @Override
             public void call(Object... obj) {
-                try {
-                    writer.close();
-                    reader.close();
-                    connection.close();
-                    BluetoothManager.getInstance().setVirtualDevice(null);
-                    BluetoothManager.getInstance().setConnected(false);
-                    Disconnect = true;
-                    synchronized (SyncObject) {
-                        SyncObject.notifyAll();
-                    }
-                } catch (IOException ex) {
-                    Logger.getLogger(VirtualDevice.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                disconnectProtocol();
             }
         });
-        synchronized (SyncObject) {
-            try {
-                SyncObject.wait();
-            } catch (InterruptedException ex) {
-                Logger.getLogger(VirtualDevice.class.getName()).log(Level.SEVERE, null, ex);
+
+    }
+
+    class CheckConnectionRunable implements Runnable {
+
+        long timeStartChecking = 0;
+        boolean checking = false;
+        boolean send = true;
+        boolean revievedMsg = false;
+
+        @Override
+        public void run() {
+            while (!Disconnect) {
+                if (send) {
+                    try {
+                        System.out.println("checkCon");
+                        send = false;
+                        checking = true;
+                        revievedMsg = false;
+                        timeStartChecking = System.currentTimeMillis();
+                        sendEvent("CheckConnection", null, new Invokelater() {
+                            @Override
+                            public void call(Object... obj) {
+                                checking = false;
+                                revievedMsg = true;
+//                                timeStartChecking = System.currentTimeMillis();
+                            }
+                        });
+                    } catch (IOException ex) {
+                        Logger.getLogger(VirtualDevice.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                long currentTime = System.currentTimeMillis();
+                if (checking == true) {
+                    long waitingTime = currentTime - timeStartChecking;
+                    if (waitingTime > 5000 && !revievedMsg) {
+                        disconnectProtocol();
+                        break;
+                    }
+                }
+                if (System.currentTimeMillis() - timeStartChecking > 5000) {
+                    send = true;
+                }
             }
         }
+
     }
 }

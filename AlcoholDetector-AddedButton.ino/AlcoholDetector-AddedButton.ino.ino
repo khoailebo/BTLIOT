@@ -55,9 +55,11 @@ void connectionTask(void *pvParameters) {
         Serial.println(data);
         if (eventName == "TestMessage") {
           ESP_BT.println("Message received");
+        }
+        else if(eventName == "CheckConnection"){
+          ESP_BT.println("CheckConnection");
         } else if (eventName == "GetAlcohol") {
-          detectAlcohol();
-          ESP_BT.println(MaxAlcohol);
+          xTaskCreate(detectingAlcoholTask, "Detecting Alcohol", 4096, NULL, 1, NULL);
         } else if (eventName == "Disconnect") {
           ESP_BT.println("Disconnect");
           disconnect();
@@ -77,6 +79,10 @@ void connectionTask(void *pvParameters) {
     vTaskDelete(connectionTaskHandle);
     connectionTaskHandle = NULL;
   }
+}
+
+void detectingAlcoholTask(void * parameters){
+  detectAlcohol();
 }
 void disconnect() {
   ESP_BT.disconnect();
