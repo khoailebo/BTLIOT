@@ -15,3 +15,6 @@ buildNumber.properties
 .project
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
+/IOTApp_Ant/nbproject/private/
+/IOTApp_Ant/build/
+/IOTApp_Ant/dist/

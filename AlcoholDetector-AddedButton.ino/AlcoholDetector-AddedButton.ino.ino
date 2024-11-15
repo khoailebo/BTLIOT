@@ -36,6 +36,7 @@ void BTLEDMode(void *pvParameters) {
 }
 
 TaskHandle_t connectionTaskHandle = NULL;  // Handle để quản lý task connectionTask
+
 void connectionTask(void *pvParameters) {
   // Kiểm tra nếu có dữ liệu từ client
   while (ESP_BT.hasClient()) {
@@ -55,8 +56,7 @@ void connectionTask(void *pvParameters) {
         Serial.println(data);
         if (eventName == "TestMessage") {
           ESP_BT.println("Message received");
-        }
-        else if(eventName == "CheckConnection"){
+        } else if (eventName == "CheckConnection") {
           ESP_BT.println("CheckConnection");
         } else if (eventName == "GetAlcohol") {
           xTaskCreate(detectingAlcoholTask, "Detecting Alcohol", 4096, NULL, 1, NULL);
@@ -81,7 +81,7 @@ void connectionTask(void *pvParameters) {
   }
 }
 
-void detectingAlcoholTask(void * parameters){
+void detectingAlcoholTask(void *pvParameters) {
   detectAlcohol();
 }
 void disconnect() {
@@ -108,7 +108,7 @@ void BTAdvertisingTask(void *pvParameters) {
 
   unsigned long startTime = millis();
   bool isConnected = false;
-  
+
 
   // Wait for up to 10 seconds for a connection
   while (millis() - startTime < 30000) {  // 20 seconds
@@ -195,8 +195,9 @@ void loop() {
   }
 
 
-  if (!playingBluetooth && pressingTime <= 2000 && pressingTime > 100) {  // Kiểm tra nếu nút nhấn được bấm
-    detectAlcohol();
+  if (!mesuring && !playingBluetooth && pressingTime <= 2000 && pressingTime > 100) {  // Kiểm tra nếu nút nhấn được bấm
+    // detectAlcohol();
+    xTaskCreate(detectingAlcoholTask, "Detecting Alcohol", 4096, NULL, 1, NULL);
   }
 }
 // void postDelay(int time, int delayTime, void (*func)()) {
@@ -240,24 +241,18 @@ void detectAlcohol() {
     }
     mesuring = false;
   }
+  vTaskDelete(NULL);
 }
 void postDelay(int time, int delayTime, void (*func)()) {
-  unsigned long lastTime = millis();
-  unsigned long passingTime = 0;
+  int lastTime = millis();
+  int passingTime = 0;
   while (passingTime <= time) {
-    unsigned long currentTime = millis();
-
-    if ((passingTime == 0 || passingTime > delayTime) && func != NULL) {
-      Serial.print("\n");
-      Serial.print(passingTime);
-      Serial.print("\n");
-      func();
-      if (passingTime > delayTime)
-        delayTime += delayTime;
-    }
-
-
-
+    int currentTime = millis();
+    Serial.print("\n");
+    Serial.print(passingTime);
+    Serial.print("\n");
+    func();
+    vTaskDelay(delayTime / portTICK_PERIOD_MS);
     passingTime += currentTime - lastTime;
     lastTime = currentTime;
   }
