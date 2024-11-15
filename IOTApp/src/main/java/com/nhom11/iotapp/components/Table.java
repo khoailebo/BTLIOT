@@ -9,12 +9,14 @@ import javax.swing.JButton;
 
 import javax.swing.JLabel;
 import javax.swing.JTable;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 public class Table extends JTable{
     public Table(){
         setShowHorizontalLines(true);
+        setShowVerticalLines(false);
         setRowHeight(40);
         setGridColor(new Color(230,230,230));
         //khong cho doi cho cac cot
@@ -30,6 +32,7 @@ public class Table extends JTable{
                         if(column == 0)
                         {
                             header.setHorizontalAlignment(JLabel.LEADING);
+                            header.setBorder(new EmptyBorder(5,20,5,0));
                         }
                         return header;
             }

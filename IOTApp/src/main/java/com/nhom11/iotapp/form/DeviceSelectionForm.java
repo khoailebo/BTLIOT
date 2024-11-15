@@ -8,19 +8,25 @@ import com.nhom11.iotapp.bluetooth.BluetoothManager;
 import com.nhom11.iotapp.callback.Invokelater;
 import com.nhom11.iotapp.components.LoadingPanel;
 import com.nhom11.iotapp.components.ScrollBar;
+import com.nhom11.iotapp.components.Table_Header;
 import com.nhom11.iotapp.event.PublicEvent;
 import com.nhom11.iotapp.event.TableSelectedEvent;
 import com.nhom11.iotapp.tablecustom.TableActionCellEditor;
 import com.nhom11.iotapp.tablecustom.TableActionCellRenderer;
 import java.awt.Color;
+import java.awt.Component;
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.bluetooth.BluetoothStateException;
 import javax.bluetooth.RemoteDevice;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -45,6 +51,20 @@ public class DeviceSelectionForm extends javax.swing.JPanel {
         jScrollPane.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
         setTableData(null);
         devicesTable.getColumnModel().getColumn(3).setCellRenderer(new TableActionCellRenderer());
+        devicesTable.getColumnModel().getColumn(0).setCellRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                Component comp = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                Table_Header th = new Table_Header(value + "");
+                th.setHorizontalAlignment(JLabel.LEADING);
+                th.setBorder(new EmptyBorder(5, 20, 5, 0));
+                if(isSelected || row % 2 != 0)
+                th.setBackground(comp.getBackground());
+                else th.setBackground(Color.WHITE);
+                return th;
+            }
+
+        });
         devicesTable.getColumnModel().getColumn(3).setCellEditor(new TableActionCellEditor(
                 new TableSelectedEvent() {
             @Override
