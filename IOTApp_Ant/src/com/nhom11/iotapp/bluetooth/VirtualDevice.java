@@ -32,6 +32,15 @@ public class VirtualDevice implements Runnable {
     String Id;
     BufferedReader reader;
     BufferedWriter writer;
+    boolean Identify = false;
+
+    public boolean isIdentify() {
+        return Identify;
+    }
+
+    public void setIdentify(boolean Identify) {
+        this.Identify = Identify;
+    }
     OutputStream output;
 
     public String getName() {
@@ -183,6 +192,8 @@ public class VirtualDevice implements Runnable {
     public void disconnectProtocol() {
         new Thread(() -> {
             try {
+                RecievedThread.interrupt();
+                CheckConnectionThread.interrupt();
                 writer.close();
                 reader.close();
                 connection.close();

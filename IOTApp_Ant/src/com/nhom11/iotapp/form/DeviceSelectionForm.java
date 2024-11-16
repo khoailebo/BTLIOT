@@ -5,29 +5,40 @@
 package com.nhom11.iotapp.form;
 
 import com.nhom11.iotapp.bluetooth.BluetoothManager;
+import com.nhom11.iotapp.callback.HttpResponseCallback;
 import com.nhom11.iotapp.callback.Invokelater;
 import com.nhom11.iotapp.components.LoadingPanel;
+import com.nhom11.iotapp.components.PopupPanel;
 import com.nhom11.iotapp.components.ScrollBar;
 import com.nhom11.iotapp.components.Table_Header;
+import com.nhom11.iotapp.entities.ModelDevice;
+import com.nhom11.iotapp.enums.PopupType;
 import com.nhom11.iotapp.event.PublicEvent;
 import com.nhom11.iotapp.event.TableSelectedEvent;
+import com.nhom11.iotapp.https.HttpClientManager;
+import com.nhom11.iotapp.mainframe.MainFrame;
 import com.nhom11.iotapp.tablecustom.TableActionCellEditor;
 import com.nhom11.iotapp.tablecustom.TableActionCellRenderer;
 import java.awt.Color;
 import java.awt.Component;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javaswingdev.Notification;
 import javax.bluetooth.BluetoothStateException;
 import javax.bluetooth.RemoteDevice;
 import javax.swing.JLabel;
+import raven.glasspanepopup.GlassPanePopup;
+import raven.glasspanepopup.*;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import org.apache.hc.core5.http.ParseException;
 
 /**
  *
@@ -58,9 +69,11 @@ public class DeviceSelectionForm extends javax.swing.JPanel {
                 Table_Header th = new Table_Header(value + "");
                 th.setHorizontalAlignment(JLabel.LEADING);
                 th.setBorder(new EmptyBorder(5, 20, 5, 0));
-                if(isSelected || row % 2 != 0)
-                th.setBackground(comp.getBackground());
-                else th.setBackground(Color.WHITE);
+                if (isSelected || row % 2 != 0) {
+                    th.setBackground(comp.getBackground());
+                } else {
+                    th.setBackground(Color.WHITE);
+                }
                 return th;
             }
 
@@ -80,6 +93,64 @@ public class DeviceSelectionForm extends javax.swing.JPanel {
                                 boolean connected = (boolean) obj[0];
                                 if (connected) {
                                     PublicEvent.getInstance().getEventMenuForm().changeForm(new DeviceDetailForm());
+                                    try {
+                                        BluetoothManager.getInstance().getVirtualDevice().setIdentify(
+                                                HttpClientManager.getInstance().checkDeviceIdentity(
+                                                        BluetoothManager.getInstance().getVirtualDevice().getId()
+                                                )
+                                        );
+                                        if (BluetoothManager.getInstance().getVirtualDevice().isIdentify()) {
+//                                            Notification panel = new Notification(MainFrame.CurrentInstance, Notification.Type.WARNING, Notification.Location.TOP_CENTER, "Device hasn't been identified!");
+//                                            panel.showNotification();
+//                                            BluetoothManager.getInstance().getVirtualDevice().disconnectProtocol();
+                                            Option option = new DefaultOption() {
+                                                @Override
+                                                public boolean closeWhenClickOutside() {
+                                                    return false; // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+                                                }
+
+                                            };
+                                            GlassPanePopup.showPopup(new PopupPanel("Warning", "Device hasn't been identified", "Click OK to Identify", PopupType.WARNING,
+                                                    new Invokelater() {
+                                                @Override
+                                                public void call(Object... obj) {
+                                                    GlassPanePopup.closePopup("warning device");
+                                                    BluetoothManager.getInstance().getVirtualDevice().disconnectProtocol();
+                                                }
+                                            }, new Invokelater() {
+                                                @Override
+                                                public void call(Object... obj) {
+                                                    try {
+                                                        System.out.println("Identify");
+                                                        HttpClientManager.getInstance().idendifyDevice(new ModelDevice("mac8402938909", "test", "x1"),
+                                                                new HttpResponseCallback() {
+                                                            @Override
+                                                            public void onSuccess(Object... os) {
+                                                                Notification panel = new Notification(MainFrame.CurrentInstance, Notification.Type.SUCCESS, Notification.Location.TOP_CENTER, (String) os[0]);
+                                                                panel.showNotification();
+//                                                                BluetoothManager.getInstance().getVirtualDevice().disconnectProtocol();
+                                                            }
+
+                                                            @Override
+                                                            public void onFailed(Object... os) {
+                                                                Notification panel = new Notification(MainFrame.CurrentInstance, Notification.Type.WARNING, Notification.Location.TOP_CENTER, (String) os[0]);
+                                                                panel.showNotification();
+                                                                BluetoothManager.getInstance().getVirtualDevice().disconnectProtocol();
+                                                            }
+
+                                                        });
+                                                        GlassPanePopup.closePopup("warning device");
+                                                    } catch (IOException | ParseException ex) {
+                                                        Logger.getLogger(DeviceSelectionForm.class.getName()).log(Level.SEVERE, null, ex);
+                                                    }
+                                                }
+
+                                            }), option, "warning device");
+
+                                        }
+                                    } catch (URISyntaxException | IOException | ParseException ex) {
+                                        Logger.getLogger(DeviceSelectionForm.class.getName()).log(Level.SEVERE, null, ex);
+                                    }
                                 } else {
                                     PublicEvent.getInstance().getEventMenuForm().changeForm(new DeviceSelectionForm());
                                 }

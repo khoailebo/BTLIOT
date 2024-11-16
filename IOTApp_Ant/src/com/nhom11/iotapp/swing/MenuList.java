@@ -12,6 +12,7 @@ import com.nhom11.iotapp.form.DeviceSelectionForm;
 import com.nhom11.iotapp.model.ModelMenu;
 import com.nhom11.iotapp.enums.MenuType;
 import com.nhom11.iotapp.form.AuthenticateForm;
+import com.nhom11.iotapp.https.HttpClientManager;
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -60,6 +61,7 @@ public class MenuList<E extends Object> extends JList<E> {
                             selectedIndex = index;
                             if (data.getMenuName().equals("Sign out")) {
                                 PublicEvent.getInstance().getEventMainFrame().changeForm(new AuthenticateForm());
+                                HttpClientManager.getInstance().signout();
                             } else {
                                 PublicEvent.getInstance().getEventMenuForm().changeForm(getForm(data));
                             }

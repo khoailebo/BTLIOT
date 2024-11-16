@@ -14,17 +14,17 @@ import com.nhom11.iotapp.enums.UserRole;
  */
 public class User extends JsonFormat{
     String access_token;
-    UserRole user_roleRole;
+    UserRole user_role;
     int user_id;
 
     public User(String access_token, UserRole user_roleRole, int user_id) {
         this.access_token = access_token;
-        this.user_roleRole = user_roleRole;
+        this.user_role = user_roleRole;
         this.user_id = user_id;
     }
     public User(JsonObject data){
         access_token = data.get("access_token").getAsString();
-        user_roleRole = UserRole.fromString(data.get("user_role").getAsString());
+        user_role = UserRole.fromString(data.get("user_role").getAsString());
         user_id = data.get("user_id").getAsInt();
     }
     public String getAccess_token() {
@@ -35,12 +35,12 @@ public class User extends JsonFormat{
         this.access_token = access_token;
     }
 
-    public UserRole getUser_roleRole() {
-        return user_roleRole;
+    public UserRole getUser_role() {
+        return user_role;
     }
 
-    public void setUser_roleRole(UserRole user_roleRole) {
-        this.user_roleRole = user_roleRole;
+    public void setUser_role(UserRole user_roleRole) {
+        this.user_role = user_roleRole;
     }
 
     public int getUser_id() {

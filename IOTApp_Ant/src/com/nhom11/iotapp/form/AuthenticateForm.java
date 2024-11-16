@@ -5,6 +5,7 @@
 package com.nhom11.iotapp.form;
 
 import com.nhom11.iotapp.event.PublicEvent;
+import com.nhom11.iotapp.event.RegisterEvent;
 import com.nhom11.iotapp.swing.EventLogin;
 
 /**
@@ -18,7 +19,7 @@ public class AuthenticateForm extends javax.swing.JPanel {
      */
     public AuthenticateForm() {
         initComponents();
-        loginAndRegister.setEventLogin(new EventLogin(){
+        loginAndRegister.setEventLogin(new EventLogin() {
             @Override
             public void loginDone() {
 //                System.out.println("log in");
@@ -27,9 +28,15 @@ public class AuthenticateForm extends javax.swing.JPanel {
 
             @Override
             public void logOut() {
-                
+
             }
-            
+
+        });
+        loginAndRegister.setEventRegister(new RegisterEvent() {
+            @Override
+            public void RegisterSucces() {
+                loginAndRegister.showLogin(true);
+            }
         });
     }
 

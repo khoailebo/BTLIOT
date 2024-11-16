@@ -3,10 +3,12 @@ package com.nhom11.iotapp.components;
 import com.nhom11.iotapp.callback.HttpResponseCallback;
 import com.nhom11.iotapp.entities.ModelLogin;
 import com.nhom11.iotapp.https.HttpClientManager;
+import com.nhom11.iotapp.mainframe.MainFrame;
 import com.nhom11.iotapp.swing.EventLogin;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javaswingdev.Notification;
 import org.apache.hc.core5.http.ParseException;
 
 public class Login extends PanelCustom {
@@ -137,7 +139,9 @@ public class Login extends PanelCustom {
 
                             @Override
                             public void onFailed(Object... os) {
-                                System.out.println((String)os[0]);
+                                System.out.println((String) os[0]);
+                                Notification panel = new Notification(MainFrame.CurrentInstance, Notification.Type.WARNING, Notification.Location.TOP_CENTER, (String) os[0]);
+                                panel.showNotification();
                             }
 
                         });

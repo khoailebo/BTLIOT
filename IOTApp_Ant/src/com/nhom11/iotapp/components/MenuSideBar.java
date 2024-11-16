@@ -6,6 +6,8 @@ package com.nhom11.iotapp.components;
 
 import com.nhom11.iotapp.model.ModelMenu;
 import com.nhom11.iotapp.enums.MenuType;
+import com.nhom11.iotapp.enums.UserRole;
+import com.nhom11.iotapp.https.HttpClientManager;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -29,6 +31,9 @@ public class MenuSideBar extends javax.swing.JPanel {
         menuList.removeAll();
         menuList.addItem(new ModelMenu("Control", "", MenuType.MENU_GROUP));
         menuList.addItem(new ModelMenu("Devices", "icon_device", MenuType.MENU_ITEM));
+        if(HttpClientManager.getInstance().getUser().getUser_role() == UserRole.admin){
+            menuList.addItem(new ModelMenu("Manage Device","icon_device",MenuType.MENU_ITEM));
+        }
         
         menuList.addItem(new ModelMenu("User", "", MenuType.MENU_GROUP));
         menuList.addItem(new ModelMenu("Account", "icon_user", MenuType.MENU_ITEM));
@@ -106,7 +111,7 @@ public class MenuSideBar extends javax.swing.JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
                 .addComponent(imagePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lbName)

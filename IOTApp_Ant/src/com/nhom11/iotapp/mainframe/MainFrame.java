@@ -13,6 +13,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.MouseEvent;
 import javax.swing.JFrame;
+import raven.glasspanepopup.GlassPanePopup;
 
 
 /**
@@ -24,8 +25,11 @@ public class MainFrame extends javax.swing.JFrame {
     /**
      * Creates new form MainFrame
      */
+    public static MainFrame CurrentInstance;
     public MainFrame() {
+        CurrentInstance = this;
         initComponents();
+        GlassPanePopup.install(this);
         setBackground(new Color(0,0,0,0));
         initEvent();
     }

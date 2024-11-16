@@ -1,5 +1,6 @@
 package com.nhom11.iotapp.components;
 
+import com.nhom11.iotapp.event.RegisterEvent;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
@@ -224,6 +225,9 @@ public class LoginAndRegister extends javax.swing.JPanel {
 
     public void setEventLogin(EventLogin event) {
         login.setEventLogin(event);
+    }
+    public void setEventRegister(RegisterEvent event){
+        register.setEvent(event);
     }
 
     @SuppressWarnings("unchecked")
