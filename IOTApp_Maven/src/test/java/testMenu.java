@@ -10,6 +10,8 @@ import java.util.logging.Logger;
 import javax.bluetooth.BluetoothStateException;
 import javax.bluetooth.RemoteDevice;
 import com.nhom11.iotapp.components.*;
+import net.miginfocom.swing.MigLayout;
+
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -31,6 +33,7 @@ public class testMenu extends javax.swing.JFrame {
                     String a = null;
                     sb.append(a);
                     System.out.println(sb.toString());
+                    MigLayout n = new MigLayout();
                     
 //        initMenu();
 //            List<RemoteDevice> list = BluetoothManager.getInstance().getDevicesList();

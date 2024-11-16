@@ -1,51 +1,31 @@
+
+import com.nhom11.iotapp.entities.ModelLogin;
+import java.awt.Dimension;
+import javax.swing.JPanel;
+import raven.glasspanepopup.GlassPanePopup;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package com.nhom11.iotapp.mainframe;
-
-import com.nhom11.iotapp.event.EventMainFrame;
-import com.nhom11.iotapp.event.PublicEvent;
-
-
-
-import java.awt.Color;
-import java.awt.event.MouseEvent;
-import javax.swing.JFrame;
 
 /**
  *
- * @author Administrator
+ * @author DELL
  */
-public class MainFrame extends javax.swing.JFrame {
+
+public class TestAuthen extends javax.swing.JFrame {
 
     /**
-     * Creates new form MainFrame
+     * Creates new form TestAuthen
      */
-    public MainFrame() {
+        JPanel p = new JPanel();
+    public TestAuthen() {
         initComponents();
-        setBackground(new Color(0,0,0,0));
-        initEvent();
-    }
-    public void initEvent(){
-        PublicEvent.getInstance().setEventMainFrame(new EventMainFrame(){
-            @Override
-            public void dragingFrame(int x, int y, MouseEvent e) {
-                setLocation(e.getXOnScreen() - x,e.getYOnScreen() - y);
-                
-            }
-
-            @Override
-            public void tabBarFrame() {
-                setExtendedState(JFrame.ICONIFIED);
-            }
-
-            @Override
-            public void closeFrame() {
-                System.exit(0);
-            }
-            
-        });
+        p.setPreferredSize(new Dimension(200,150));
+        System.out.println(new ModelLogin("btdung", "123").toJsonObj());
+        GlassPanePopup.install(this);
+        
     }
 
     /**
@@ -57,23 +37,26 @@ public class MainFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        panelBorder = new com.nhom11.iotapp.components.PanelBorder();
-        menuForm = new com.nhom11.iotapp.form.MenuForm();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setUndecorated(true);
         getContentPane().setLayout(new java.awt.CardLayout());
 
-        panelBorder.setBackground(new java.awt.Color(255, 255, 255));
-        panelBorder.setPreferredSize(new java.awt.Dimension(900, 600));
-        panelBorder.setLayout(new java.awt.CardLayout());
-        panelBorder.add(menuForm, "card2");
-
-        getContentPane().add(panelBorder, "card2");
+        jButton1.setText("jButton1");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton1, "card2");
 
         pack();
-        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        GlassPanePopup.showPopup(p);
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -92,26 +75,25 @@ public class MainFrame extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TestAuthen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TestAuthen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TestAuthen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TestAuthen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MainFrame().setVisible(true);
+                new TestAuthen().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.nhom11.iotapp.form.MenuForm menuForm;
-    private com.nhom11.iotapp.components.PanelBorder panelBorder;
+    private javax.swing.JButton jButton1;
     // End of variables declaration//GEN-END:variables
 }

@@ -10,6 +10,7 @@ import com.nhom11.iotapp.event.PublicEvent;
 import net.miginfocom.swing.MigLayout;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.MouseEvent;
 import javax.swing.JFrame;
 
@@ -45,6 +46,14 @@ public class MainFrame extends javax.swing.JFrame {
             public void closeFrame() {
                 System.exit(0);
             }
+
+            @Override
+            public void changeForm(Component comp) {
+                panelBorder.removeAll();
+                panelBorder.add(comp);
+                revalidate();
+                repaint();
+            }
             
         });
     }
@@ -59,7 +68,7 @@ public class MainFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         panelBorder = new com.nhom11.iotapp.components.PanelBorder();
-        menuForm = new com.nhom11.iotapp.form.MenuForm();
+        authenticateForm = new com.nhom11.iotapp.form.AuthenticateForm();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -68,7 +77,7 @@ public class MainFrame extends javax.swing.JFrame {
         panelBorder.setBackground(new java.awt.Color(255, 255, 255));
         panelBorder.setPreferredSize(new java.awt.Dimension(900, 600));
         panelBorder.setLayout(new java.awt.CardLayout());
-        panelBorder.add(menuForm, "card2");
+        panelBorder.add(authenticateForm, "card3");
 
         getContentPane().add(panelBorder, "card2");
 
@@ -112,7 +121,7 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.nhom11.iotapp.form.MenuForm menuForm;
+    private com.nhom11.iotapp.form.AuthenticateForm authenticateForm;
     private com.nhom11.iotapp.components.PanelBorder panelBorder;
     // End of variables declaration//GEN-END:variables
 }

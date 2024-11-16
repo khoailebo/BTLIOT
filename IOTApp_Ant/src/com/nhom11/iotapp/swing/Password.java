@@ -1,4 +1,4 @@
-package com.nhom11.iotapp.components;
+package com.nhom11.iotapp.swing;
 
 import java.awt.Color;
 import java.awt.FontMetrics;
@@ -9,7 +9,7 @@ import java.awt.geom.RoundRectangle2D;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
-
+import com.nhom11.iotapp.components.LoginAndRegister;
 
 public class Password extends JPasswordField {
 
@@ -27,7 +27,7 @@ public class Password extends JPasswordField {
         setBorder(new EmptyBorder(10, 10, 10, 10));
         setBackground(new Color(0, 0, 0, 0));
         setHorizontalAlignment(JTextField.CENTER);
-        setSelectionColor(new Color(246, 207, 104));
+        setSelectionColor(LoginAndRegister.mainColor);
     }
 
     @Override
@@ -37,7 +37,7 @@ public class Password extends JPasswordField {
         g2.setColor(getForeground());
         int width = getWidth() - 1;
         int height = getHeight() - 1;
-        g2.draw(new RoundRectangle2D.Double(2, 2, width - 4, height - 4, 12, 12));
+        g2.draw(new RoundRectangle2D.Double(2, 2, width - 4, height - 4, height - 4, height - 4));
         if (!hint.equals("") && getPassword().length == 0) {
             createHintText(g2);
         }

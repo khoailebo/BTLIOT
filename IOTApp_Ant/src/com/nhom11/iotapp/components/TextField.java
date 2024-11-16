@@ -35,7 +35,7 @@ public class TextField extends JTextField {
         g2.setColor(getForeground());
         int width = getWidth() - 1;
         int height = getHeight() - 1;
-        g2.draw(new RoundRectangle2D.Double(2, 2, width - 4, height - 4, height - 4, height - 4));
+        g2.draw(new RoundRectangle2D.Double(2, 2, width - 4, height - 4, 12, 12));
         if (!hint.equals("") && getText().length() == 0) {
             createHintText(g2);
         }

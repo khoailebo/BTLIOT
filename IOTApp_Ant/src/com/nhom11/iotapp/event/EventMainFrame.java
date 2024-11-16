@@ -4,6 +4,7 @@
  */
 package com.nhom11.iotapp.event;
 
+import java.awt.Component;
 import java.awt.event.MouseEvent;
 
 /**
@@ -14,4 +15,5 @@ public interface EventMainFrame {
     public void dragingFrame(int x,int y, MouseEvent e);
     public void tabBarFrame();
     public void closeFrame();
+    public void changeForm(Component comp);
 }
