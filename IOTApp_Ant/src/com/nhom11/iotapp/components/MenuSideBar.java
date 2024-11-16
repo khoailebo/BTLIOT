@@ -31,7 +31,7 @@ public class MenuSideBar extends javax.swing.JPanel {
         menuList.removeAll();
         menuList.addItem(new ModelMenu("Control", "", MenuType.MENU_GROUP));
         menuList.addItem(new ModelMenu("Devices", "icon_device", MenuType.MENU_ITEM));
-        if(HttpClientManager.getInstance().getUser().getUser_role() == UserRole.admin){
+        if(HttpClientManager.getInstance().getUser()!= null && HttpClientManager.getInstance().getUser().getUser_role() == UserRole.admin){
             menuList.addItem(new ModelMenu("Manage Device","icon_device",MenuType.MENU_ITEM));
         }
         

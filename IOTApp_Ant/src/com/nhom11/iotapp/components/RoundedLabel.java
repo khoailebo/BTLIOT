@@ -4,8 +4,6 @@
  */
 package com.nhom11.iotapp.components;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import javax.swing.JLabel;
 import javax.swing.border.EmptyBorder;
 
@@ -15,16 +13,8 @@ import javax.swing.border.EmptyBorder;
  */
 public class RoundedLabel extends JLabel{
     public RoundedLabel(){
-        setBorder(new EmptyBorder(5,10,5,10));
         setOpaque(false);
-    }
-
-    @Override
-    protected void paintComponent(Graphics g) {
-        Graphics2D g2 = (Graphics2D) g;
-        g2.setColor(getBackground());
-        g2.drawRoundRect(0, 0, getWidth(), getHeight(), 15, 15);
-        super.paintComponent(g); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+        setBorder(new EmptyBorder(5,10,5,10));
     }
     
 }
