@@ -114,6 +114,8 @@ public class Register extends PanelCustom {
                         @Override
                         public void onSuccess(Object... os) {
                             event.RegisterSucces();
+                            Notification panel = new Notification(MainFrame.CurrentInstance, Notification.Type.SUCCESS, Notification.Location.TOP_CENTER, (String) os[0]);
+                            panel.showNotification();
                         }
 
                         @Override

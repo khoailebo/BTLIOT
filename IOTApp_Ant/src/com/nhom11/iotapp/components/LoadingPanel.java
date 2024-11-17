@@ -28,8 +28,10 @@ public class LoadingPanel extends javax.swing.JLayeredPane {
 
         jLabel1 = new javax.swing.JLabel();
 
-        setBackground(new java.awt.Color(255, 51, 51));
+        setBackground(new java.awt.Color(255, 255, 255));
+        setOpaque(true);
 
+        jLabel1.setBackground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/nhom11/iotapp/resources/image/loading_image.gif"))); // NOI18N
 

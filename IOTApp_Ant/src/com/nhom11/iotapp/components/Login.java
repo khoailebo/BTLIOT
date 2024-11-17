@@ -32,7 +32,7 @@ public class Login extends PanelCustom {
         jLabel1 = new javax.swing.JLabel();
         tfUserName = new com.nhom11.iotapp.swing.TextField();
         pfPassWord = new com.nhom11.iotapp.swing.Password();
-        button1 = new com.nhom11.iotapp.swing.Button();
+        signInBtn = new com.nhom11.iotapp.swing.Button();
         jLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
@@ -53,13 +53,13 @@ public class Login extends PanelCustom {
         pfPassWord.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
         pfPassWord.setHint("PASSWORD");
 
-        button1.setBackground(new java.awt.Color(86, 142, 255));
-        button1.setForeground(new java.awt.Color(255, 255, 255));
-        button1.setText("Sign In");
-        button1.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
-        button1.addActionListener(new java.awt.event.ActionListener() {
+        signInBtn.setBackground(new java.awt.Color(86, 142, 255));
+        signInBtn.setForeground(new java.awt.Color(255, 255, 255));
+        signInBtn.setText("Sign In");
+        signInBtn.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
+        signInBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button1ActionPerformed(evt);
+                signInBtnActionPerformed(evt);
             }
         });
 
@@ -88,7 +88,7 @@ public class Login extends PanelCustom {
                     .addComponent(pfPassWord, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(tfUserName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
-                    .addComponent(button1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(signInBtn, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(30, 30, 30))
             .addGroup(layout.createSequentialGroup()
                 .addGap(63, 63, 63)
@@ -111,7 +111,7 @@ public class Login extends PanelCustom {
                 .addGap(18, 18, 18)
                 .addComponent(pfPassWord, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(40, 40, 40)
-                .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(signInBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -123,12 +123,13 @@ public class Login extends PanelCustom {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void button1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button1ActionPerformed
+    private void signInBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signInBtnActionPerformed
         if (getAlpha() == 0) {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     try {
+                        event.startLogin();
                         HttpClientManager.getInstance().login(new ModelLogin(tfUserName.getText(), new String(pfPassWord.getPassword())),
                                 new HttpResponseCallback() {
                             @Override
@@ -140,31 +141,30 @@ public class Login extends PanelCustom {
                             @Override
                             public void onFailed(Object... os) {
                                 System.out.println((String) os[0]);
-                                Notification panel = new Notification(MainFrame.CurrentInstance, Notification.Type.WARNING, Notification.Location.TOP_CENTER, (String) os[0]);
-                                panel.showNotification();
+                                event.loginFailed((String)os[0]);
                             }
 
                         });
-                    } catch (IOException ex) {
-                        Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (ParseException ex) {
+                    }
+                    catch(Exception ex){
+                        event.loginFailed("Cannot login");
                         Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             }, "Login Thread").start();
 
         }
-    }//GEN-LAST:event_button1ActionPerformed
+    }//GEN-LAST:event_signInBtnActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.nhom11.iotapp.swing.Button button1;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private com.nhom11.iotapp.swing.Password pfPassWord;
+    private com.nhom11.iotapp.swing.Button signInBtn;
     private com.nhom11.iotapp.swing.TextField tfUserName;
     // End of variables declaration//GEN-END:variables
 }

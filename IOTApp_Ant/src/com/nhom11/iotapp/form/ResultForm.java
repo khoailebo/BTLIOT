@@ -5,8 +5,10 @@
 package com.nhom11.iotapp.form;
 
 import com.nhom11.iotapp.bluetooth.BluetoothManager;
+import com.nhom11.iotapp.enums.AlcoholStatus;
 import com.nhom11.iotapp.event.PublicEvent;
 import com.nhom11.iotapp.https.HttpClientManager;
+import java.awt.Color;
 
 /**
  *
@@ -21,13 +23,23 @@ public class ResultForm extends javax.swing.JPanel {
         initComponents();
         initData();
     }
-    public void initData(){
+
+    public void initData() {
         lbDeviceId.setText(BluetoothManager.getInstance().getVirtualDevice().getId());
         lbDeviceName.setText(BluetoothManager.getInstance().getVirtualDevice().getName());
         lbAlcoholLevel.setText(Float.toString(BluetoothManager.getInstance().getVirtualDevice().getAlcoholValue()));
+        if (BluetoothManager.getInstance().getVirtualDevice().getAlcoholStatus() == AlcoholStatus.HIGH) {
+            lbAlcoholLevel.setBackground(Color.red);
+            createFinebBtn.setVisible(true);
+        } else {
+//            createFinebBtn.setVisible(false);
+
+        }
         lbUserId.setText(Integer.toString(HttpClientManager.getInstance().getUser().getUser_id()));
         lbUserRole.setText(HttpClientManager.getInstance().getUser().getUser_role().toString());
+
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -190,6 +202,11 @@ public class ResultForm extends javax.swing.JPanel {
         createFinebBtn.setForeground(new java.awt.Color(255, 255, 255));
         createFinebBtn.setText("Create Fine");
         createFinebBtn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        createFinebBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                createFinebBtnActionPerformed(evt);
+            }
+        });
 
         jPanel6.setOpaque(false);
 
@@ -239,9 +256,8 @@ public class ResultForm extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(79, 79, 79)))
-                .addGap(57, 57, 57))
+                            .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(53, 53, 53))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -272,6 +288,11 @@ public class ResultForm extends javax.swing.JPanel {
         // TODO add your handling code here:
         PublicEvent.getInstance().getEventMenuForm().changeForm(new DeviceDetailForm());
     }//GEN-LAST:event_backBtnActionPerformed
+
+    private void createFinebBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createFinebBtnActionPerformed
+        // TODO add your handling code here:
+        PublicEvent.getInstance().getEventMenuForm().changeForm(new FineForm());
+    }//GEN-LAST:event_createFinebBtnActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

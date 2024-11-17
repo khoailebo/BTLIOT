@@ -11,7 +11,9 @@ import com.nhom11.iotapp.form.DeviceDetailForm;
 import com.nhom11.iotapp.form.DeviceSelectionForm;
 import com.nhom11.iotapp.model.ModelMenu;
 import com.nhom11.iotapp.enums.MenuType;
+import com.nhom11.iotapp.form.AcountForm;
 import com.nhom11.iotapp.form.AuthenticateForm;
+import com.nhom11.iotapp.form.ManageDeviceForm;
 import com.nhom11.iotapp.https.HttpClientManager;
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
@@ -40,6 +42,12 @@ public class MenuList<E extends Object> extends JList<E> {
         switch (data.getMenuName()) {
             case "Devices":
                 comp = BluetoothManager.getInstance().isConnected() ? new DeviceDetailForm() : new DeviceSelectionForm();
+                break;
+            case "Account":
+                comp = new AcountForm();
+                break;
+            case "Manage Device":
+                comp = new ManageDeviceForm();
                 break;
             default:
                 comp = null;

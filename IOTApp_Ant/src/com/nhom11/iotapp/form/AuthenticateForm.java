@@ -6,7 +6,10 @@ package com.nhom11.iotapp.form;
 
 import com.nhom11.iotapp.event.PublicEvent;
 import com.nhom11.iotapp.event.RegisterEvent;
+import com.nhom11.iotapp.mainframe.MainFrame;
 import com.nhom11.iotapp.swing.EventLogin;
+import java.awt.Color;
+import javaswingdev.Notification;
 
 /**
  *
@@ -17,18 +20,39 @@ public class AuthenticateForm extends javax.swing.JPanel {
     /**
      * Creates new form AuthenticateForm
      */
+    public void showLoading(boolean show) {
+        loadingPanel.setVisible(show);
+        loginAndRegister.setVisible(!show);
+    }
+
     public AuthenticateForm() {
         initComponents();
+        loadingPanel.setBackground(new Color(255, 255, 255, 100));
         loginAndRegister.setEventLogin(new EventLogin() {
             @Override
             public void loginDone() {
 //                System.out.println("log in");
+                showLoading(false);
                 PublicEvent.getInstance().getEventMainFrame().changeForm(new MenuForm());
             }
 
             @Override
             public void logOut() {
 
+            }
+
+            @Override
+            public void startLogin() {
+//                throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+                showLoading(true);
+            }
+
+            @Override
+            public void loginFailed(String msg) {
+//                throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+                Notification panel = new Notification(MainFrame.CurrentInstance, Notification.Type.WARNING, Notification.Location.TOP_CENTER, msg);
+                panel.showNotification();
+                showLoading(false);
             }
 
         });
@@ -50,14 +74,17 @@ public class AuthenticateForm extends javax.swing.JPanel {
     private void initComponents() {
 
         loginAndRegister = new com.nhom11.iotapp.components.LoginAndRegister();
+        loadingPanel = new com.nhom11.iotapp.components.LoadingPanel();
 
         setOpaque(false);
         setLayout(new java.awt.CardLayout());
         add(loginAndRegister, "card2");
+        add(loadingPanel, "card3");
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.nhom11.iotapp.components.LoadingPanel loadingPanel;
     private com.nhom11.iotapp.components.LoginAndRegister loginAndRegister;
     // End of variables declaration//GEN-END:variables
 }

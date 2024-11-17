@@ -5,6 +5,7 @@
 package com.nhom11.iotapp.form;
 
 import com.nhom11.iotapp.bluetooth.BluetoothManager;
+import com.nhom11.iotapp.bluetooth.VirtualDevice;
 import com.nhom11.iotapp.callback.HttpResponseCallback;
 import com.nhom11.iotapp.callback.Invokelater;
 import com.nhom11.iotapp.components.LoadingPanel;
@@ -99,7 +100,7 @@ public class DeviceSelectionForm extends javax.swing.JPanel {
                                                         BluetoothManager.getInstance().getVirtualDevice().getId()
                                                 )
                                         );
-                                        if (BluetoothManager.getInstance().getVirtualDevice().isIdentify()) {
+                                        if (!BluetoothManager.getInstance().getVirtualDevice().isIdentify()) {
 //                                            Notification panel = new Notification(MainFrame.CurrentInstance, Notification.Type.WARNING, Notification.Location.TOP_CENTER, "Device hasn't been identified!");
 //                                            panel.showNotification();
 //                                            BluetoothManager.getInstance().getVirtualDevice().disconnectProtocol();
@@ -122,7 +123,9 @@ public class DeviceSelectionForm extends javax.swing.JPanel {
                                                 public void call(Object... obj) {
                                                     try {
                                                         System.out.println("Identify");
-                                                        HttpClientManager.getInstance().idendifyDevice(new ModelDevice("mac8402938909", "test", "x1"),
+                                                        VirtualDevice device = BluetoothManager.getInstance().getVirtualDevice();
+                                                        HttpClientManager.getInstance().idendifyDevice(new ModelDevice(
+                                                                device.getId(), device.getName(), "Model demo"),
                                                                 new HttpResponseCallback() {
                                                             @Override
                                                             public void onSuccess(Object... os) {

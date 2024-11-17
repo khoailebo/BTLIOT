@@ -5,9 +5,12 @@
 package com.nhom11.iotapp.https;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.nhom11.iotapp.callback.HttpResponseCallback;
+import com.nhom11.iotapp.entities.Fine;
 import com.nhom11.iotapp.entities.ModelDevice;
 import com.nhom11.iotapp.entities.ModelLogin;
 import com.nhom11.iotapp.entities.ModelSignUp;
@@ -15,7 +18,10 @@ import com.nhom11.iotapp.entities.User;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import org.apache.hc.client5.http.classic.methods.HttpDelete;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
@@ -103,7 +109,7 @@ public class HttpClientManager {
         return jsonResponse.get("exists").getAsBoolean();
     }
 
-    public HttpGet createGetRequest(String apiEndpoint, HashMap<String, Object> queryParameters, Object pathParamenter) throws URISyntaxException {
+    public HttpGet createGetRequest(String apiEndpoint, HashMap<String, ? extends Object> queryParameters, Object pathParamenter) throws URISyntaxException {
         URIBuilder builder = new URIBuilder(BaseUrl + apiEndpoint + (pathParamenter != null ? "/" + pathParamenter.toString() : ""));
 //                .addParameter("userId", "1") // Add parameters here
 //                .build();
@@ -123,6 +129,65 @@ public class HttpClientManager {
         return request;
     }
 
+    
+    public void submitFineInfo(Fine fine,HttpResponseCallback callback) throws IOException{
+        CloseableHttpResponse response = httpClient.execute(createPostRequest(fine.toJsonObj(), "/measurements"));
+        if(response.getCode() == 201){
+            callback.onSuccess("Submit Success");
+        }
+        else{callback.onFailed("Submit Failed");}
+    }
+    public HttpDelete createDeleteRequest(String apiEndPoint,String pathParameter){
+        HttpDelete deleteRequest = new HttpDelete(BaseUrl + apiEndPoint + (pathParameter != null ? "/" + pathParameter.toString() : ""));
+        deleteRequest.setHeader("Content-Type", "application/json");
+        if (user != null) {
+            deleteRequest.setHeader("Authorization", "Bearer " + user.getAccess_token());
+        }
+        return  deleteRequest;
+    }
+    public void deleteDevice(String deviceId,HttpResponseCallback callback) throws IOException, ParseException{
+        CloseableHttpResponse response = httpClient.execute(
+                createDeleteRequest("/devices", deviceId)
+        );
+        String responseString = EntityUtils.toString(response.getEntity());
+        JsonObject jsonResponse = JsonParser.parseString(responseString).getAsJsonObject();
+        boolean success = jsonResponse.get("success").getAsBoolean();
+        String msg = jsonResponse.get("message").getAsString();
+        if(success){
+            callback.onSuccess(msg);
+        }
+        else {
+            callback.onFailed(msg);
+        }
+    }
+    public void getDeviceList(HttpResponseCallback callback) throws URISyntaxException, IOException, ParseException{
+        HashMap<String,String> queryParameters = new HashMap<>();
+        queryParameters.put("status", "active");       
+//        queryParameters.put("search", "test");
+        queryParameters.put("page", "1");
+        queryParameters.put("per_page", "10");
+
+        
+        CloseableHttpResponse response = httpClient.execute(
+                createGetRequest("/devices", queryParameters, null)
+        );
+        String responseString = EntityUtils.toString(response.getEntity());
+        JsonObject jsonResponse = JsonParser.parseString(responseString).getAsJsonObject();
+        boolean success = jsonResponse.get("success").getAsBoolean();
+        if(success){
+            JsonObject data = jsonResponse.getAsJsonObject("data");
+            JsonArray devices = data.getAsJsonArray("devices");
+            List<ModelDevice> devicesList = new ArrayList<>();
+            for(JsonElement device : devices){
+                devicesList.add(new Gson().fromJson(device, ModelDevice.class));
+            }
+            if(!devicesList.isEmpty() && devicesList.get(0) instanceof ModelDevice device)
+            callback.onSuccess(devicesList.toArray());
+        }
+        else{
+            callback.onFailed();
+        }
+    }
     public void signup(ModelSignUp signUp, HttpResponseCallback callback) throws IOException, ParseException {
         CloseableHttpResponse response = httpClient.execute(createPostRequest(signUp.toJsonObj(), "/auth/register"));
         String responseString = EntityUtils.toString(response.getEntity());
@@ -130,7 +195,7 @@ public class HttpClientManager {
         JsonObject jsonResponse = JsonParser.parseString(responseString).getAsJsonObject();
         boolean success = jsonResponse.get("success").getAsBoolean();
         if (success) {
-            callback.onSuccess();
+            callback.onSuccess(jsonResponse.get("message").getAsString());
         } else {
             callback.onFailed("Sign up failed");
         }

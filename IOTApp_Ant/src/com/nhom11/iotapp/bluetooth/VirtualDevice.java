@@ -4,7 +4,10 @@
  */
 package com.nhom11.iotapp.bluetooth;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.nhom11.iotapp.callback.Invokelater;
+import com.nhom11.iotapp.enums.AlcoholStatus;
 import com.nhom11.iotapp.event.PublicEvent;
 import com.nhom11.iotapp.form.DeviceSelectionForm;
 import com.nhom11.iotapp.form.MesuringForm;
@@ -64,6 +67,11 @@ public class VirtualDevice implements Runnable {
     HashMap<String, ArrayList<Invokelater>> callBackList;
     static HashMap<String, Invokelater> eventListenerHashMap;
     boolean Disconnect;
+    static AlcoholStatus AlcoholStatus;
+
+    public AlcoholStatus getAlcoholStatus() {
+        return AlcoholStatus;
+    }
 
     public static void initEvent() {
         if (eventListenerHashMap == null) {
@@ -77,9 +85,21 @@ public class VirtualDevice implements Runnable {
             eventListenerHashMap.put("GetAlcohol", new Invokelater() {
                 @Override
                 public void call(Object... obj) {
-                    AlcoholValue = Float.parseFloat((String) obj[0]);
-                    System.out.println(AlcoholValue);
+                    JsonObject jsonResponse = JsonParser.parseString((String) obj[0]).getAsJsonObject();
+                    AlcoholValue = jsonResponse.get("alcohol_level").getAsFloat();
+                    AlcoholStatus = AlcoholStatus.fromString(jsonResponse.get("status").getAsString());
+                    System.out.println((String) obj[0]);
                     PublicEvent.getInstance().getEventMenuForm().changeForm(new ResultForm());
+                }
+            });
+            eventListenerHashMap.put("DeviceCheckConnection", new Invokelater() {
+                @Override
+                public void call(Object... obj) {
+                    try {
+                        BluetoothManager.getInstance().getVirtualDevice().sendEvent("DeviceCheckConnection", null, null);
+                    } catch (IOException ex) {
+                        Logger.getLogger(VirtualDevice.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
             });
         }
@@ -208,11 +228,34 @@ public class VirtualDevice implements Runnable {
         }, "Disconnect Thread").start();
     }
 
-    public void disconnect() throws IOException {
+    public void disconnectProtocolWithOutComeBack() {
+        new Thread(() -> {
+            try {
+                RecievedThread.interrupt();
+                CheckConnectionThread.interrupt();
+                writer.close();
+                reader.close();
+                connection.close();
+                BluetoothManager.getInstance().setVirtualDevice(null);
+                BluetoothManager.getInstance().setConnected(false);
+                Disconnect = true;
+                System.out.println("dis");
+            } catch (IOException ex) {
+                Logger.getLogger(VirtualDevice.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }, "Disconnect Thread").start();
+    }
+
+    public void disconnect(boolean comeback) throws IOException {
         sendEvent("Disconnect", null, new Invokelater() {
             @Override
             public void call(Object... obj) {
-                disconnectProtocol();
+                if (comeback) {
+                    disconnectProtocol();
+                }
+                else {
+                    disconnectProtocolWithOutComeBack();
+                }
             }
         });
 
@@ -244,7 +287,9 @@ public class VirtualDevice implements Runnable {
                             }
                         });
                     } catch (IOException ex) {
+                        disconnectProtocol();
                         Logger.getLogger(VirtualDevice.class.getName()).log(Level.SEVERE, null, ex);
+                        break;
                     }
                 }
                 long currentTime = System.currentTimeMillis();

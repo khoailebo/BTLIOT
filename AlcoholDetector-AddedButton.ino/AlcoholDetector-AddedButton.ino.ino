@@ -15,11 +15,12 @@ LiquidCrystal_I2C lcd(0x27, 16, 2);  // Địa chỉ I2C của LCD, 16 cột và
 float RL = 4.7;   // Điện trở tải RL
 float R0 = 10.0;  // Giá trị hiệu chuẩn cho không khí sạch
 float MaxAlcohol = 0;
-
+String AlcoholStatus = "";
 bool playingBluetooth = false;
 unsigned long buttonPressTime = 0;  // Variable to store button press duration
 bool isButtonPressed = false;       // Flag to track button press status
 bool mesuring = false;
+bool isConnected = false;
 
 void BTLEDMode(void *pvParameters) {
   while (playingBluetooth) {
@@ -34,14 +35,71 @@ void BTLEDMode(void *pvParameters) {
   digitalWrite(LED_RED, LOW);
   vTaskDelete(NULL);
 }
-
 TaskHandle_t connectionTaskHandle = NULL;  // Handle để quản lý task connectionTask
+TaskHandle_t checkConnectionTaskHandle = NULL;
+bool recievedMsg = false;
+int timeStartSending = 0;
+void checkConnectionTask(void *parameters) {
+  bool sending = false;
+  timeStartSending = 0;
+  while (true) {
+    if (!sending) {
+      sending = true;
+      recievedMsg = false;
+      ESP_BT.println("DeviceCheckConnection");
+      timeStartSending = millis();
+    }
+    if (!recievedMsg) {
+      int waitingTime = millis() - timeStartSending;
+      if (waitingTime > 5000) {
+        // if (connectionTaskHandle != NULL) {
+        //   vTaskDelete(connectionTaskHandle);
+        //   connectionTaskHandle = NULL;
+        // }
+        break;
+      }
+    }
+    int waitingTime = millis() - timeStartSending;
+    if (waitingTime > 5000) {
+      sending = false;
+    }
+    vTaskDelay(100 / portTICK_PERIOD_MS);  // Độ trễ nhỏ để tránh vòng lặp chiếm CPU
+  }
+  xTaskCreate(disconnect, "DisconnectTask", 4096, NULL, 1, NULL);
+  if (checkConnectionTaskHandle != NULL) {
+    vTaskDelete(checkConnectionTaskHandle);
+    checkConnectionTaskHandle = NULL;
+  }
+}
+void disconnect(void *para) {
+  Serial.println("Disconnecting");
+  ESP_BT.disconnect();
+  vTaskDelay(100 / portTICK_PERIOD_MS);  // Allow time for Bluetooth stack to handle disconnection
+  ESP_BT.end();
+  vTaskDelay(100 / portTICK_PERIOD_MS);  // Allow more time before continuing
+
+  // Clean up resources or reset state
+  isConnected = false;
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Disconnect");
+
+  Serial.println("End Connection!");
+  vTaskDelay(1500 / portTICK_PERIOD_MS);  // Allow more time before continuing
+  resetLCD();
+  // Delete the task if it was created
+  vTaskDelete(NULL);
+}
 
 void connectionTask(void *pvParameters) {
   // Kiểm tra nếu có dữ liệu từ client
   while (ESP_BT.hasClient()) {
+    // if(!isConnected){
+    //   break;
+    // }
     if (ESP_BT.available()) {
-      String request = ESP_BT.readString();  // Đọc dữ liệu từ client
+      String request = ESP_BT.readString();
+      // Đọc dữ liệu từ client
       Serial.print("Received request: ");
       Serial.println(request);  // In ra dữ liệu nhận được để kiểm tra
 
@@ -56,13 +114,15 @@ void connectionTask(void *pvParameters) {
         Serial.println(data);
         if (eventName == "TestMessage") {
           ESP_BT.println("Message received");
+        } else if (eventName == "DeviceCheckConnection") {
+          recievedMsg = true;
+          timeStartSending = millis();
         } else if (eventName == "CheckConnection") {
           ESP_BT.println("CheckConnection");
         } else if (eventName == "GetAlcohol") {
           xTaskCreate(detectingAlcoholTask, "Detecting Alcohol", 4096, NULL, 1, NULL);
         } else if (eventName == "Disconnect") {
           ESP_BT.println("Disconnect");
-          disconnect();
           break;
         }
       }
@@ -75,6 +135,7 @@ void connectionTask(void *pvParameters) {
 
     vTaskDelay(100 / portTICK_PERIOD_MS);  // Độ trễ nhỏ để tránh vòng lặp chiếm CPU
   }
+  xTaskCreate(disconnect, "DisconnectTask", 4096, NULL, 1, NULL);
   if (connectionTaskHandle != NULL) {
     vTaskDelete(connectionTaskHandle);
     connectionTaskHandle = NULL;
@@ -83,12 +144,9 @@ void connectionTask(void *pvParameters) {
 
 void detectingAlcoholTask(void *pvParameters) {
   detectAlcohol();
+  vTaskDelete(NULL);
 }
-void disconnect() {
-  ESP_BT.disconnect();
-  ESP_BT.end();
-  Serial.println("End Connection!");
-}
+
 void BTAdvertisingTask(void *pvParameters) {
   if (!ESP_BT.begin("ESP32_Bluetooth_Server")) {  // Initialize Bluetooth with device name
     Serial.println("Bluetooth initialization failed.");
@@ -107,7 +165,7 @@ void BTAdvertisingTask(void *pvParameters) {
   lcd.print("................");
 
   unsigned long startTime = millis();
-  bool isConnected = false;
+  isConnected = false;
 
 
   // Wait for up to 10 seconds for a connection
@@ -117,13 +175,14 @@ void BTAdvertisingTask(void *pvParameters) {
       Serial.println("Bluetooth client connected!");
       lcd.setCursor(0, 1);
       lcd.print("Connected!    ");
-      vTaskDelay(1000 / portTICK_PERIOD_MS);
+      // vTaskDelay(1000 / portTICK_PERIOD_MS);
       break;  // Exit loop if connected
     }
     vTaskDelay(100 / portTICK_PERIOD_MS);  // Check every 100 ms
   }
   if (isConnected) {
     xTaskCreate(connectionTask, "connectionTask", 4096, NULL, 200, &connectionTaskHandle);
+    // xTaskCreate(checkConnectionTask, "CheckConnectionTask", 4096, NULL, 50, &checkConnectionTaskHandle);
   }
   // If no connection was established, end Bluetooth
   if (!isConnected) {
@@ -196,8 +255,8 @@ void loop() {
 
 
   if (!mesuring && !playingBluetooth && pressingTime <= 2000 && pressingTime > 100) {  // Kiểm tra nếu nút nhấn được bấm
-    // detectAlcohol();
-    xTaskCreate(detectingAlcoholTask, "Detecting Alcohol", 4096, NULL, 1, NULL);
+    detectAlcohol();
+    // xTaskCreate(detectingAlcoholTask, "Detecting Alcohol", 4096, NULL, 1, NULL);
   }
 }
 // void postDelay(int time, int delayTime, void (*func)()) {
@@ -237,11 +296,11 @@ void detectAlcohol() {
     digitalWrite(LED_RED, LOW);
     resetLCD();
     if (ESP_BT.hasClient()) {
-      ESP_BT.println("GetAlcohol|" + String(MaxAlcohol, 2));
+      ESP_BT.println("GetAlcohol|{\"alcohol_level\":" + String(MaxAlcohol, 2) + ",\"status\":\"" + (MaxAlcohol > 0.2 ? "HIGH" : "LOW") + "\"}");
     }
     mesuring = false;
+    noTone(BUZZER_PIN);
   }
-  vTaskDelete(NULL);
 }
 void postDelay(int time, int delayTime, void (*func)()) {
   int lastTime = millis();
@@ -295,7 +354,7 @@ void showAlcoholDetail() {
     lcd.print(mgL, 2);
     digitalWrite(LED_BLUE, LOW);
     digitalWrite(LED_RED, HIGH);
-    // tone(BUZZER_PIN, 1000);
+    tone(BUZZER_PIN, 1000);
   } else {
     // Serial.print(mq3_value);
     Serial.print("\n");
@@ -304,7 +363,7 @@ void showAlcoholDetail() {
     lcd.print(mgL, 2);
     digitalWrite(LED_BLUE, LOW);
     digitalWrite(LED_RED, HIGH);
-    // tone(BUZZER_PIN, 1000);
+    tone(BUZZER_PIN, 1000);
   }
   Serial.print("\n\n");
   // delay(1000);

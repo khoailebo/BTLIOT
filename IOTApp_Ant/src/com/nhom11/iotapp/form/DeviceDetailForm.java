@@ -261,7 +261,7 @@ public class DeviceDetailForm extends javax.swing.JPanel {
                 try {
                     // TODO add your handling code here:
                     PublicEvent.getInstance().getEventMenuForm().changeForm(new LoadingPanel());
-                    BluetoothManager.getInstance().getVirtualDevice().disconnect();
+                    BluetoothManager.getInstance().getVirtualDevice().disconnect(true);
                 } catch (IOException ex) {
                     Logger.getLogger(DeviceDetailForm.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (Exception ex) {
