@@ -211,7 +211,7 @@ public class DeviceSelectionForm extends javax.swing.JPanel {
         searchBtn.setBackground(new java.awt.Color(51, 204, 255));
         searchBtn.setForeground(new java.awt.Color(255, 255, 255));
         searchBtn.setText("Search Devices");
-        searchBtn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        searchBtn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         searchBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 searchBtnActionPerformed(evt);
