@@ -5,6 +5,7 @@
 package com.nhom11.iotapp.components;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -23,6 +24,7 @@ public class BtnClickAnimate extends JButton{
         setContentAreaFilled(false);
         setBorder(new EmptyBorder(0,0,0,0));
         setBorderPainted(false);
+        setCursor(new Cursor(Cursor.HAND_CURSOR));
 //        setBackground(Color.white);
         addMouseListener(new MouseAdapter(){
             @Override

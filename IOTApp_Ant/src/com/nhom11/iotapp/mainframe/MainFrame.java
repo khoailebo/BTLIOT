@@ -12,6 +12,7 @@ import net.miginfocom.swing.MigLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.MouseEvent;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import raven.glasspanepopup.GlassPanePopup;
 
@@ -32,6 +33,12 @@ public class MainFrame extends javax.swing.JFrame {
         GlassPanePopup.install(this);
         setBackground(new Color(0,0,0,0));
         initEvent();
+        try{
+            setIconImage(new ImageIcon(getClass().getResource("/com/nhom11/iotapp/resources/icon/Vietnamese_Traffic_Police_Icon-removebg-preview.png")).getImage());
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
     public void initEvent(){
         PublicEvent.getInstance().setEventMainFrame(new EventMainFrame(){

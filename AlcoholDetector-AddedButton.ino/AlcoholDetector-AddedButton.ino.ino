@@ -291,7 +291,7 @@ void detectAlcohol() {
       ESP_BT.println("StartMesuring");
     }
     MaxAlcohol = 0;
-    postDelay(5000, 1000, showAlcoholDetail);
+    postDelay(5000, 500, showAlcoholDetail);
     digitalWrite(LED_BLUE, LOW);
     digitalWrite(LED_RED, LOW);
     resetLCD();

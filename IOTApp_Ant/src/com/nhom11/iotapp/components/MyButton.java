@@ -5,6 +5,7 @@
 package com.nhom11.iotapp.components;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -24,6 +25,7 @@ public class MyButton extends JButton{
         setFocusable(false);
         setContentAreaFilled(false);
         setBorder(new EmptyBorder(0,0,0,0));
+        setCursor(new Cursor(Cursor.HAND_CURSOR));
         setBorderPainted(false);
         addMouseListener(new MouseAdapter(){
             @Override

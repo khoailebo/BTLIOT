@@ -31,15 +31,15 @@ public class MenuSideBar extends javax.swing.JPanel {
         menuList.removeAll();
         menuList.addItem(new ModelMenu("Control", "", MenuType.MENU_GROUP));
         menuList.addItem(new ModelMenu("Devices", "icon_device", MenuType.MENU_ITEM));
-        if(HttpClientManager.getInstance().getUser()!= null && HttpClientManager.getInstance().getUser().getUser_role() == UserRole.admin){
-            menuList.addItem(new ModelMenu("Manage Device","icon_device_list",MenuType.MENU_ITEM));
+        if (HttpClientManager.getInstance().getUser() != null && HttpClientManager.getInstance().getUser().getUser_role() == UserRole.admin) {
+            menuList.addItem(new ModelMenu("Manage Device", "icon_device_list", MenuType.MENU_ITEM));
         }
-        
+        menuList.addItem(new ModelMenu("Visualize", "icon_chart", MenuType.MENU_ITEM));
+
         menuList.addItem(new ModelMenu("User", "", MenuType.MENU_GROUP));
         menuList.addItem(new ModelMenu("Account", "icon_user", MenuType.MENU_ITEM));
         menuList.addItem(new ModelMenu("Sign out", "icon_logout", MenuType.MENU_ITEM));
         menuList.addItem(new ModelMenu("Sign out", "icon_logout", MenuType.MENU_SPACE));
-
 
         menuList.updateUI();
 //        menuList.addItem(new ModelMenu("Devices","",MenuType.MENU_GROUP));
@@ -60,11 +60,6 @@ public class MenuSideBar extends javax.swing.JPanel {
         g2.fillRect(getWidth() - 20, 0, 20, getHeight());
         super.paintChildren(g); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
     }
-
-    
-
-    
-    
 
     /**
      * This method is called from within the constructor to initialize the form.

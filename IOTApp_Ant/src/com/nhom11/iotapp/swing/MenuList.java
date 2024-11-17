@@ -14,6 +14,7 @@ import com.nhom11.iotapp.enums.MenuType;
 import com.nhom11.iotapp.form.AcountForm;
 import com.nhom11.iotapp.form.AuthenticateForm;
 import com.nhom11.iotapp.form.ManageDeviceForm;
+import com.nhom11.iotapp.form.VisualizeDataForm;
 import com.nhom11.iotapp.https.HttpClientManager;
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
@@ -48,6 +49,9 @@ public class MenuList<E extends Object> extends JList<E> {
                 break;
             case "Manage Device":
                 comp = new ManageDeviceForm();
+                break;
+            case "Visualize":
+                comp = new VisualizeDataForm();
                 break;
             default:
                 comp = null;

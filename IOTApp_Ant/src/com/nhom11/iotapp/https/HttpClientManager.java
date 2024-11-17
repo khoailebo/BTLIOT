@@ -11,6 +11,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.nhom11.iotapp.callback.HttpResponseCallback;
 import com.nhom11.iotapp.entities.Fine;
+import com.nhom11.iotapp.entities.Mesurement;
 import com.nhom11.iotapp.entities.ModelDevice;
 import com.nhom11.iotapp.entities.ModelLogin;
 import com.nhom11.iotapp.entities.ModelSignUp;
@@ -186,6 +187,24 @@ public class HttpClientManager {
         }
         else{
             callback.onFailed();
+        }
+    }
+    public void getAllMesurements(HttpResponseCallback callback) throws URISyntaxException, IOException, ParseException{
+        CloseableHttpResponse response = httpClient.execute(
+                createGetRequest("/measurements", null, null)
+        );
+        String responseString = EntityUtils.toString(response.getEntity());
+        JsonArray mesurementArray = JsonParser.parseString(responseString).getAsJsonArray();
+        List<Mesurement>mesurementList = new ArrayList<>();
+        for(JsonElement mesurement : mesurementArray){
+            mesurementList.add(new Gson().fromJson(mesurement, Mesurement.class));
+        }
+        System.out.println(responseString);
+        if(response.getCode() == 200){
+            callback.onSuccess(mesurementList.toArray());
+        }
+        else {
+            callback.onFailed("Cannot get data");
         }
     }
     public void signup(ModelSignUp signUp, HttpResponseCallback callback) throws IOException, ParseException {
