@@ -8,12 +8,12 @@ package com.nhom11.iotapp.form;
  *
  * @author DELL
  */
-public class MesuringForm extends javax.swing.JPanel {
+public class MeasuringForm extends javax.swing.JPanel {
 
     /**
      * Creates new form MesuringForm
      */
-    public MesuringForm() {
+    public MeasuringForm() {
         initComponents();
     }
 
@@ -34,7 +34,7 @@ public class MesuringForm extends javax.swing.JPanel {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(102, 102, 102));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Mesuring...");
+        jLabel1.setText("Measuring...");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);

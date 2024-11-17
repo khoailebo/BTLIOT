@@ -48,6 +48,6 @@ public class ModelMenu {
 //    /com/nhom11/iotapp... : absolute path
 //    com/nhom11/iotapp... : relative path
     public Icon toImage(){
-        return new ImageIcon(getClass().getResource("../resources/icon/" + MenuIcon + ".png"));
+        return new ImageIcon(getClass().getResource("/com/nhom11/iotapp/resources/icon/" + MenuIcon + ".png"));
     }
 }

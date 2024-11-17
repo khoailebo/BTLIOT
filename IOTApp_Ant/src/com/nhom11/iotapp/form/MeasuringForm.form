@@ -45,7 +45,7 @@
           <Color blue="66" green="66" red="66" type="rgb"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="0"/>
-        <Property name="text" type="java.lang.String" value="Mesuring..."/>
+        <Property name="text" type="java.lang.String" value="Measuring..."/>
       </Properties>
     </Component>
     <Component class="com.nhom11.iotapp.components.LoadingPanel" name="loadingPanel1">

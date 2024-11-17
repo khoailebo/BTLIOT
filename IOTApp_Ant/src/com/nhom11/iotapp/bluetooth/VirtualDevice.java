@@ -10,7 +10,7 @@ import com.nhom11.iotapp.callback.Invokelater;
 import com.nhom11.iotapp.enums.AlcoholStatus;
 import com.nhom11.iotapp.event.PublicEvent;
 import com.nhom11.iotapp.form.DeviceSelectionForm;
-import com.nhom11.iotapp.form.MesuringForm;
+import com.nhom11.iotapp.form.MeasuringForm;
 import com.nhom11.iotapp.form.ResultForm;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -79,7 +79,7 @@ public class VirtualDevice implements Runnable {
             eventListenerHashMap.put("StartMesuring", new Invokelater() {
                 @Override
                 public void call(Object... obj) {
-                    PublicEvent.getInstance().getEventMenuForm().changeForm(new MesuringForm());
+                    PublicEvent.getInstance().getEventMenuForm().changeForm(new MeasuringForm());
                 }
             });
             eventListenerHashMap.put("GetAlcohol", new Invokelater() {
