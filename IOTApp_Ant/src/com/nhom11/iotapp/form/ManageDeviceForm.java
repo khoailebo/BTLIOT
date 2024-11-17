@@ -99,7 +99,8 @@ public class ManageDeviceForm extends javax.swing.JPanel {
                                                                 Notification panel = new Notification(MainFrame.CurrentInstance, Notification.Type.SUCCESS, Notification.Location.TOP_CENTER, (String) os[0]);
                                                                 panel.showNotification();
                                                                 String deviceId = deviceTable.getModel().getValueAt(((int) obj[0]), 1).toString();
-                                                                if(BluetoothManager.getInstance().getVirtualDevice().getId().equals(deviceId)){
+                                                                if(BluetoothManager.getInstance().isConnected()
+                                                                        &&BluetoothManager.getInstance().getVirtualDevice().getId().equals(deviceId)){
                                                                     try {
                                                                         BluetoothManager.getInstance().getVirtualDevice().disconnect(false);
                                                                     } catch (IOException ex) {
