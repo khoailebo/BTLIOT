@@ -9,6 +9,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.nhom11.iotapp.bluetooth.BluetoothManager;
 import com.nhom11.iotapp.callback.HttpResponseCallback;
 import com.nhom11.iotapp.entities.Fine;
 import com.nhom11.iotapp.entities.Mesurement;
@@ -86,6 +87,10 @@ public class HttpClientManager {
     }
 
     public void idendifyDevice(ModelDevice modelDevice,HttpResponseCallback callback) throws IOException, ParseException{
+        if(!BluetoothManager.getInstance().getVirtualDevice().isSystemDevice()){
+            callback.onFailed("Device is not recognize");
+            return;
+        }
         CloseableHttpResponse response = httpClient.execute(createPostRequest(modelDevice.toJsonObj(), "/devices/register"));
         String responseString = EntityUtils.toString(response.getEntity());
         JsonObject jsonResponse = JsonParser.parseString(responseString).getAsJsonObject();

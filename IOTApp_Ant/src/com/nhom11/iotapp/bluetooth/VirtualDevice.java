@@ -33,6 +33,15 @@ public class VirtualDevice implements Runnable {
     static final Object SyncObject = new Object();
     String Name;
     String Id;
+    boolean SystemDevice;
+
+    public boolean isSystemDevice() {
+        return SystemDevice;
+    }
+
+    public void setSystemDevice(boolean SystemDevice) {
+        this.SystemDevice = SystemDevice;
+    }
     BufferedReader reader;
     BufferedWriter writer;
     boolean Identify = false;
@@ -102,6 +111,14 @@ public class VirtualDevice implements Runnable {
                     }
                 }
             });
+            eventListenerHashMap.put("Confirm Device", new Invokelater() {
+                @Override
+                public void call(Object... obj) {
+//                    throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+                    BluetoothManager.getInstance().getVirtualDevice().setSystemDevice(true);
+                }
+            }
+            );
         }
     }
 
@@ -117,6 +134,7 @@ public class VirtualDevice implements Runnable {
             reader = new BufferedReader(new InputStreamReader(streamConnection.openInputStream()));
             writer = new BufferedWriter(new OutputStreamWriter(output));
             RecievedThread = new Thread(this, "Recieved Thread");
+            RecievedThread.setPriority(Thread.MAX_PRIORITY);
             CheckConnectionThread = new Thread(new CheckConnectionRunable(), "Check Connection Thread");
 
         } catch (Exception ex) {

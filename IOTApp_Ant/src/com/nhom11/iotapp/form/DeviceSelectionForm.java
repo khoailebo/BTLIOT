@@ -115,37 +115,56 @@ public class DeviceSelectionForm extends javax.swing.JPanel {
                                                     new Invokelater() {
                                                 @Override
                                                 public void call(Object... obj) {
-                                                    GlassPanePopup.closePopup("warning device");
-                                                    BluetoothManager.getInstance().getVirtualDevice().disconnectProtocol();
+                                                    new Thread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+//                                                            throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+                                                            GlassPanePopup.closePopup("warning device");
+                                                            BluetoothManager.getInstance().getVirtualDevice().disconnectProtocol();
+                                                        }
+                                                    }, "Cancle Identity Thread").start();
                                                 }
                                             }, new Invokelater() {
                                                 @Override
                                                 public void call(Object... obj) {
-                                                    try {
-                                                        System.out.println("Identify");
-                                                        VirtualDevice device = BluetoothManager.getInstance().getVirtualDevice();
-                                                        HttpClientManager.getInstance().idendifyDevice(new ModelDevice(
-                                                                device.getId(), device.getName(), "Model demo"),
-                                                                new HttpResponseCallback() {
-                                                            @Override
-                                                            public void onSuccess(Object... os) {
-                                                                Notification panel = new Notification(MainFrame.CurrentInstance, Notification.Type.SUCCESS, Notification.Location.TOP_CENTER, (String) os[0]);
-                                                                panel.showNotification();
+                                                    new Thread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+//                                                            throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+                                                            try {
+                                                                System.out.println("Identify");
+                                                                VirtualDevice device = BluetoothManager.getInstance().getVirtualDevice();
+                                                                if (device != null) {
+                                                                    HttpClientManager.getInstance().idendifyDevice(new ModelDevice(
+                                                                            device.getId(), device.getName(), "Model demo"),
+                                                                            new HttpResponseCallback() {
+                                                                        @Override
+                                                                        public void onSuccess(Object... os) {
+                                                                            Notification panel = new Notification(MainFrame.CurrentInstance, Notification.Type.SUCCESS, Notification.Location.TOP_CENTER, (String) os[0]);
+                                                                            panel.showNotification();
 //                                                                BluetoothManager.getInstance().getVirtualDevice().disconnectProtocol();
-                                                            }
+                                                                        }
 
-                                                            @Override
-                                                            public void onFailed(Object... os) {
-                                                                Notification panel = new Notification(MainFrame.CurrentInstance, Notification.Type.WARNING, Notification.Location.TOP_CENTER, (String) os[0]);
-                                                                panel.showNotification();
-                                                                BluetoothManager.getInstance().getVirtualDevice().disconnectProtocol();
-                                                            }
+                                                                        @Override
+                                                                        public void onFailed(Object... os) {
+                                                                            Notification panel = new Notification(MainFrame.CurrentInstance, Notification.Type.WARNING, Notification.Location.TOP_CENTER, (String) os[0]);
+                                                                            panel.showNotification();
+                                                                            BluetoothManager.getInstance().getVirtualDevice().disconnectProtocol();
+                                                                        }
 
-                                                        });
-                                                        GlassPanePopup.closePopup("warning device");
-                                                    } catch (IOException | ParseException ex) {
-                                                        Logger.getLogger(DeviceSelectionForm.class.getName()).log(Level.SEVERE, null, ex);
-                                                    }
+                                                                    });
+                                                                } else {
+                                                                    Notification panel = new Notification(MainFrame.CurrentInstance, Notification.Type.WARNING, Notification.Location.TOP_CENTER, "Device unknown!");
+                                                                    panel.showNotification();
+                                                                }
+
+                                                            } catch (IOException | ParseException ex) {
+                                                                Logger.getLogger(DeviceSelectionForm.class.getName()).log(Level.SEVERE, null, ex);
+                                                            } finally {
+                                                                GlassPanePopup.closePopup("warning device");
+                                                            }
+                                                        }
+                                                    }, "Indentity Thread").start();
                                                 }
 
                                             }), option, "warning device");

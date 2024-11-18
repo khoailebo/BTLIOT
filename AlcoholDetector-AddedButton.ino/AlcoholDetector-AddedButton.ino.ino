@@ -92,6 +92,9 @@ void disconnect(void *para) {
 }
 
 void connectionTask(void *pvParameters) {
+  if(ESP_BT.hasClient()){
+    ESP_BT.println("Confirm Device");
+  }
   // Kiểm tra nếu có dữ liệu từ client
   while (ESP_BT.hasClient()) {
     // if(!isConnected){
