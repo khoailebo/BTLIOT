@@ -51,15 +51,19 @@ public class PopupPanel extends javax.swing.JPanel {
             
             });
         }
+//        relative path work for jar
+//        absolute path work for exe
         if(type == PopupType.SUCCESS){
-            imIcon.setImage(new ImageIcon(getClass().getResource("../resources/icon/success.png")));
+            imIcon.setImage(new ImageIcon(getClass().getResource("/com/nhom11/iotapp/resources/icon/success.png")));
         }
         else if(type == PopupType.INFO){
-            imIcon.setImage(new ImageIcon(getClass().getResource("../resources/icon/infor.png")));
+            imIcon.setImage(new ImageIcon(getClass().getResource("/com/nhom11/iotapp/resources/icon/infor.png")));
         }
         else {
-            imIcon.setImage(new ImageIcon(getClass().getResource("../resources/icon/warning.png")));
+            imIcon.setImage(new ImageIcon(getClass().getResource("/com/nhom11/iotapp/resources/icon/warning.png")));
         }
+//        relativ path work for jar
+//        absolute path work for exe
     }
 
     @Override

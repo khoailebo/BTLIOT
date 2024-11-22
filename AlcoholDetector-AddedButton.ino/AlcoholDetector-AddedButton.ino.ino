@@ -329,7 +329,7 @@ float getAlcohol() {
 }
 
 void showAlcoholDetail() {
-  float mgL = getAlcohol();
+  float mgL = getAlcohol()/2;
   if (mgL > MaxAlcohol) MaxAlcohol = mgL;
   lcd.clear();
   lcd.setCursor(0, 0);

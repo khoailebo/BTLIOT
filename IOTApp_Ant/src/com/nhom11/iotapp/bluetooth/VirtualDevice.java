@@ -232,14 +232,14 @@ public class VirtualDevice implements Runnable {
             try {
                 RecievedThread.interrupt();
                 CheckConnectionThread.interrupt();
-                writer.close();
-                reader.close();
-                connection.close();
                 BluetoothManager.getInstance().setVirtualDevice(null);
                 BluetoothManager.getInstance().setConnected(false);
                 Disconnect = true;
                 PublicEvent.getInstance().getEventMenuForm().changeForm(new DeviceSelectionForm());
                 System.out.println("dis");
+                connection.close();
+                writer.close();
+                reader.close();
             } catch (IOException ex) {
                 Logger.getLogger(VirtualDevice.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -251,13 +251,14 @@ public class VirtualDevice implements Runnable {
             try {
                 RecievedThread.interrupt();
                 CheckConnectionThread.interrupt();
-                writer.close();
-                reader.close();
-                connection.close();
                 BluetoothManager.getInstance().setVirtualDevice(null);
                 BluetoothManager.getInstance().setConnected(false);
                 Disconnect = true;
-                System.out.println("dis");
+//                PublicEvent.getInstance().getEventMenuForm().changeForm(new DeviceSelectionForm());
+                System.out.println("dis on delete");
+                connection.close();
+                writer.close();
+                reader.close();
             } catch (IOException ex) {
                 Logger.getLogger(VirtualDevice.class.getName()).log(Level.SEVERE, null, ex);
             }

@@ -98,7 +98,7 @@ public class ManageDeviceForm extends javax.swing.JPanel {
 //                                                                        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
                                                                 Notification panel = new Notification(MainFrame.CurrentInstance, Notification.Type.SUCCESS, Notification.Location.TOP_CENTER, (String) os[0]);
                                                                 panel.showNotification();
-                                                                String deviceId = deviceTable.getModel().getValueAt(((int) obj[0]), 1).toString();
+                                                                String deviceId = (String)os[1];
                                                                 if(BluetoothManager.getInstance().isConnected()
                                                                         &&BluetoothManager.getInstance().getVirtualDevice().getId().equals(deviceId)){
                                                                     try {

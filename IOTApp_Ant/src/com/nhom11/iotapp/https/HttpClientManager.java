@@ -17,12 +17,19 @@ import com.nhom11.iotapp.entities.ModelDevice;
 import com.nhom11.iotapp.entities.ModelLogin;
 import com.nhom11.iotapp.entities.ModelSignUp;
 import com.nhom11.iotapp.entities.User;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.hc.client5.http.classic.methods.HttpDelete;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
@@ -53,13 +60,24 @@ public class HttpClientManager {
         return BaseUrl;
     }
 
-    public void setBaseUrl(String BaseUrl) {
-        this.BaseUrl = BaseUrl;
+    public void setBaseUrl(String fineName) {
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader("src/config/baseurl.txt"));
+            String line = reader.readLine();
+            if(line.contains(":")){
+                BaseUrl = line;
+            }
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(HttpClientManager.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(HttpClientManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-
+    
     public static HttpClientManager getInstance() {
         if (instance == null) {
             instance = new HttpClientManager();
+            instance.setBaseUrl("baseurl.txt");
         }
         return instance;
     }
@@ -160,7 +178,7 @@ public class HttpClientManager {
         boolean success = jsonResponse.get("success").getAsBoolean();
         String msg = jsonResponse.get("message").getAsString();
         if(success){
-            callback.onSuccess(msg);
+            callback.onSuccess(msg,deviceId);
         }
         else {
             callback.onFailed(msg);
